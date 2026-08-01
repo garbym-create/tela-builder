@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": "0.2",
+    "version": "0.3",
     "language": "he",
-    "source": "בנק היגדים, מאגר מטרות ויעדים, מאגר היגדים במתמטיקה (כיתה א'), ריכוז מטרות רגשיות וחברתיות (מתי\"א אשדוד) — עיבוד",
+    "source": "בנק היגדים, מאגר מטרות ויעדים, מאגר היגדים במתמטיקה (כיתה א'), ריכוז מטרות רגשיות וחברתיות (מתי\"א אשדוד) — עיבוד. גרסה 0.3 מרחיבה לפי חומרי שרון רז: בנק מוקדי כוח וחיזוק, נקודות להתייחסות בפרופיל תלמיד, רמזור פרופיל תלמיד, והסבר על תחומים ורמות תפקוד.",
     "note": "תח\"י ותל\"א זהים בתוכן; ההבדל הוא המסגרת. שדה programType נקבע לפי סוג הכיתה שנבחר בראיון.",
     "criteriaConvention": "אחוז מהמקרים, ברצף מתקדם בין מחצית א' לסוף שנה",
     "tableColumns": [
@@ -31,6 +31,14 @@
   },
   "domains": [
     {
+      "id": "cognitive",
+      "label": "קוגניטיבי",
+      "subdomains": [
+        "cognitive_reasoning",
+        "cognitive_executive"
+      ]
+    },
+    {
       "id": "academic",
       "label": "לימודי",
       "subdomains": [
@@ -38,11 +46,18 @@
         "reading_comprehension",
         "writing_motor",
         "writing_expression",
-        "language_oral",
         "math",
         "math_numbers",
         "math_operations",
         "math_geometry"
+      ]
+    },
+    {
+      "id": "language",
+      "label": "שפתי-תקשורתי",
+      "subdomains": [
+        "language_oral",
+        "discourse"
       ]
     },
     {
@@ -563,6 +578,337 @@
       "partial": "שומר על מרחב אישי בתזכורת",
       "weakness": "מתקשה לשמור על מרחב אישי, נוגע ללא רשות",
       "cognitiveTags": []
+    },
+    {
+      "id": "st_comp_details",
+      "subdomain": "reading_comprehension",
+      "prompt": "מענה על שאלות איתור פרטים",
+      "strength": "משיב על שאלות ברמה של איתור פרטים",
+      "partial": "משיב על שאלות איתור פרטים בעזרת תיווך",
+      "weakness": "מתקשה להשיב על שאלות ברמה של איתור פרטים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_comp_vocab",
+      "subdomain": "reading_comprehension",
+      "prompt": "פירוש מילים קשות",
+      "strength": "מפרש מילים קשות מתוך ההקשר",
+      "partial": "מפרש מילים קשות בעזרת מילון או מאגר מילים נתון",
+      "weakness": "מתקשה לפרש מילים קשות גם בעזרת מאגר מילים נתון",
+      "cognitiveTags": [
+        "חשיבה מילולית מופשטת"
+      ]
+    },
+    {
+      "id": "st_write_syntax",
+      "subdomain": "writing_expression",
+      "prompt": "תחביר ומבנה משפט",
+      "strength": "מיישם בכתיבתו את כללי התחביר וכותב משפטים תקינים",
+      "partial": "כותב משפטים תקינים בעזרת תבנית או פתיחי משפט",
+      "weakness": "משתמש בכתיבתו בשפה הדבורה ומתקשה במבנה המשפט",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_write_wordprocessor",
+      "subdomain": "writing_expression",
+      "prompt": "כתיבה במעבד תמלילים",
+      "strength": "כותב במעבד תמלילים באופן עצמאי",
+      "partial": "כותב במעבד תמלילים בעזרת הכוונה",
+      "weakness": "מתקשה לכתוב במעבד תמלילים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_write_copy",
+      "subdomain": "writing_motor",
+      "prompt": "העתקה מהלוח",
+      "strength": "מעתיק מהלוח מילה שלמה, בקצב הכיתה",
+      "partial": "מעתיק מהלוח בקצב איטי או בעזרת דף מוכן חלקית",
+      "weakness": "מתקשה להעתיק מהלוח, מעתיק אות אות",
+      "cognitiveTags": [
+        "קשב"
+      ]
+    },
+    {
+      "id": "st_mot_homework",
+      "subdomain": "motivation",
+      "prompt": "הכנת שיעורי בית ומטלות",
+      "strength": "מכין שיעורי בית ומטלות בקביעות",
+      "partial": "מכין שיעורי בית לפעמים",
+      "weakness": "אינו מכין שיעורי בית",
+      "cognitiveTags": [
+        "תפקודים ניהוליים"
+      ]
+    },
+    {
+      "id": "st_mot_participation",
+      "subdomain": "motivation",
+      "prompt": "השתתפות פעילה בשיעור",
+      "strength": "משתתף באופן פעיל ומצביע בשיעור",
+      "partial": "משתתף כאשר פונים אליו ישירות",
+      "weakness": "אינו משתתף באופן פעיל בלימודים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_mot_exams",
+      "subdomain": "motivation",
+      "prompt": "הכנה למבחנים",
+      "strength": "מתכונן למבחנים באופן עצמאי",
+      "partial": "מתכונן למבחנים בעזרת תיווך ותוכנית למידה",
+      "weakness": "מתקשה להתכונן למבחנים",
+      "cognitiveTags": [
+        "תפקודים ניהוליים"
+      ]
+    },
+    {
+      "id": "st_ind_peer_learning",
+      "subdomain": "independence",
+      "prompt": "שיתוף פעולה בלמידת עמיתים",
+      "strength": "משתף פעולה בלמידת עמיתים",
+      "partial": "משתף פעולה בלמידת עמיתים בתיווך",
+      "weakness": "מתקשה לשתף פעולה בלמידת עמיתים, מעדיף למידה יחידנית",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_rules_leaving",
+      "subdomain": "rules_authority",
+      "prompt": "שהייה בכיתה ויציאה ברשות",
+      "strength": "נשאר בכיתה ויוצא ברשות",
+      "partial": "יוצא ברשות לאחר תזכורת",
+      "weakness": "יוצא מהכיתה ללא רשות",
+      "cognitiveTags": [
+        "בקרה עצמית"
+      ]
+    },
+    {
+      "id": "st_rules_authority",
+      "subdomain": "rules_authority",
+      "prompt": "קבלת סמכות",
+      "strength": "מקבל את מרות אנשי הצוות ומגיב באופן הולם",
+      "partial": "מקבל סמכות בתיווך ובהכנה מראש",
+      "weakness": "מתקשה לקבל סמכות",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_soc_tolerance",
+      "subdomain": "social_cognition",
+      "prompt": "סובלנות ונימוסי שיח",
+      "strength": "מגלה סובלנות ונימוסי שיח כלפי תלמידים ומורים",
+      "partial": "מגלה סובלנות ונימוסי שיח בתזכורת",
+      "weakness": "מגיב באלימות מילולית או מתגרה בתלמידים",
+      "cognitiveTags": [
+        "בקרה עצמית"
+      ]
+    },
+    {
+      "id": "st_soc_loss",
+      "subdomain": "social_cognition",
+      "prompt": "התמודדות עם הפסד",
+      "strength": "מתמודד עם הפסד באופן מותאם וממשיך לשחק",
+      "partial": "מתמודד עם הפסד בהכנה מראש ובתיווך",
+      "weakness": "מתקשה להתמודד עם הפסד, פורש או מתפרץ",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_emo_sensitivity",
+      "subdomain": "emotional_regulation",
+      "prompt": "רגישות לסביבה",
+      "strength": "מגיב ברגישות מותאמת לסביבה ולאחר",
+      "partial": "רגיש יתר על המידה בסיטואציות מסוימות",
+      "weakness": "מגלה רגישות יתר או מגיב בחוסר רגישות לסביבה",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_soc_staff",
+      "subdomain": "peer_relations",
+      "prompt": "קשר עם הצוות החינוכי",
+      "strength": "יוצר קשר תקין עם אנשי הצוות החינוכי",
+      "partial": "יוצר קשר עם איש צוות מוכר בלבד",
+      "weakness": "מתקשה ליצור קשר עם הצוות החינוכי",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_soc_recess",
+      "subdomain": "peer_relations",
+      "prompt": "המצאות עם חברים בהפסקות",
+      "strength": "נמצא עם חברים בהפסקות",
+      "partial": "נמצא עם חברים בהפסקה בתיווך איש צוות",
+      "weakness": "מבלה את ההפסקות לבד",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_lang_turn",
+      "subdomain": "language_oral",
+      "prompt": "שמירה על תור בשיח",
+      "strength": "ממתין לתורו בשיח",
+      "partial": "ממתין לתורו בתיווך",
+      "weakness": "מתקשה להמתין לתורו, קוטע את השיח",
+      "cognitiveTags": [
+        "בקרה עצמית"
+      ]
+    },
+    {
+      "id": "st_lang_questions",
+      "subdomain": "language_oral",
+      "prompt": "שאילת שאלות",
+      "strength": "שואל שאלות רלוונטיות ביוזמתו",
+      "partial": "שואל שאלות בתיווך ובעזרת מילות שאלה נתונות",
+      "weakness": "אינו שואל שאלות",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_lang_articulation",
+      "subdomain": "language_oral",
+      "prompt": "דיבור ברור והיגוי",
+      "strength": "מדבר בבירור ובהיגוי תקין",
+      "partial": "דיבורו מובן לרוב",
+      "weakness": "דיבורו אינו מובן",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_lang_relevant",
+      "subdomain": "language_oral",
+      "prompt": "מענה רלוונטי לשאלה",
+      "strength": "משיב תשובה רלוונטית לשאלה שנשאלה",
+      "partial": "משיב תשובה רלוונטית לאחר פיצוח השאלה",
+      "weakness": "מתקשה לתת מענה רלוונטי לשאלה",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_disc_open",
+      "subdomain": "discourse",
+      "prompt": "פתיחת שיח",
+      "strength": "פותח שיח ביוזמתו באופן מותאם",
+      "partial": "פותח שיח בעזרת תבנית דיבור",
+      "weakness": "מתקשה לפתוח שיח",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_disc_join",
+      "subdomain": "discourse",
+      "prompt": "הצטרפות לשיח",
+      "strength": "מצטרף לשיח קיים בעיתוי מתאים",
+      "partial": "מצטרף לשיח בתיווך",
+      "weakness": "מתקשה להצטרף לשיח",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_disc_topic",
+      "subdomain": "discourse",
+      "prompt": "שמירה על נושא השיח",
+      "strength": "שומר על נושא השיחה",
+      "partial": "שומר על נושא השיחה בתיווך",
+      "weakness": "סוטה מנושא השיחה",
+      "cognitiveTags": [
+        "קשב"
+      ]
+    },
+    {
+      "id": "st_disc_close",
+      "subdomain": "discourse",
+      "prompt": "סיום שיח",
+      "strength": "מסיים שיחה באופן מותאם",
+      "partial": "מסיים שיחה בתיווך",
+      "weakness": "מתקשה לסיים שיחה",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_disc_nonverbal",
+      "subdomain": "discourse",
+      "prompt": "קריאת שפת גוף והבעות פנים",
+      "strength": "קורא הבעות פנים ושפת גוף ומגיב בהתאם",
+      "partial": "קורא שפת גוף בתיווך ובהכוונה",
+      "weakness": "מתקשה לקרוא שפת גוף והבעות פנים",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_cog_inference",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "הסקת מסקנות",
+      "strength": "מסיק מסקנות באופן עצמאי",
+      "partial": "מסיק מסקנות בעזרת שאלות מנחות או מאגר מסקנות",
+      "weakness": "מתקשה להסיק מסקנות",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_cog_sorting",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "מיון והכללה",
+      "strength": "ממיין ומכליל לפי קריטריון שבחר בעצמו",
+      "partial": "ממיין לפי קריטריון נתון בלבד",
+      "weakness": "מתקשה למיין ולהכליל",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_cog_main_idea",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "הבחנה בין עיקר לטפל",
+      "strength": "מבחין בין עיקר לטפל",
+      "partial": "מבחין בין עיקר לטפל בתיווך",
+      "weakness": "מתקשה להבחין בין עיקר לטפל",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_cog_cause",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "סיבה ותוצאה",
+      "strength": "מבין ומסביר יחסי סיבה ותוצאה",
+      "partial": "מבין יחסי סיבה ותוצאה בתיווך",
+      "weakness": "מתקשה בהבנת יחסי סיבה ותוצאה",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_cog_sequence",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "הבנת רצפים",
+      "strength": "מבין רצף של תהליך ומסדר אותו",
+      "partial": "מסדר רצף בעזרת אמצעי המחשה",
+      "weakness": "מתקשה בהבנת רצפים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_cog_executive",
+      "subdomain": "cognitive_executive",
+      "prompt": "תכנון וארגון משימה",
+      "strength": "מתכנן, מארגן ומבצע משימה מרובת שלבים",
+      "partial": "מתכנן ומארגן בעזרת כרטיסיית ניווט",
+      "weakness": "מתקשה בתכנון ובארגון משימה",
+      "cognitiveTags": [
+        "תפקודים ניהוליים"
+      ]
+    },
+    {
+      "id": "st_cog_control",
+      "subdomain": "cognitive_executive",
+      "prompt": "בקרה עצמית ותיקון טעויות",
+      "strength": "בודק את עצמו ומתקן טעויות באופן עצמאי",
+      "partial": "מפעיל בקרה בעזרת רשימת בדיקה",
+      "weakness": "מתקשה להפעיל בקרה עצמית",
+      "cognitiveTags": [
+        "בקרה עצמית"
+      ]
+    },
+    {
+      "id": "st_cog_time",
+      "subdomain": "cognitive_executive",
+      "prompt": "ניהול זמן",
+      "strength": "מנהל את זמנו ועומד במטלה בזמן שהוקצב",
+      "partial": "עומד בזמן בעזרת טיימר ותזכורות",
+      "weakness": "מתקשה לעמוד במטלה בזמן שהוקצב",
+      "cognitiveTags": [
+        "תפקודים ניהוליים"
+      ]
     }
   ],
   "goals": [
@@ -623,7 +969,9 @@
         "st_comp_retell",
         "st_comp_main_idea",
         "st_comp_inference",
-        "st_comp_monitoring"
+        "st_comp_monitoring",
+        "st_comp_details",
+        "st_comp_vocab"
       ],
       "title": "הרחבת הבנת הנקרא והפקת משמעות מטקסט",
       "gradeBands": [
@@ -636,7 +984,9 @@
         "יאתר פרטים גלויים בטקסט תואם רמה",
         "יזהה את הרעיון המרכזי של הטקסט",
         "יסיק מסקנות מהטקסט בעזרת מאגר מסקנות ובהמשך באופן עצמאי",
-        "יפעיל תהליכי בקרה: יעצור, ישאל את עצמו האם הבין, ויחזור לקרוא במידת הצורך"
+        "יפעיל תהליכי בקרה: יעצור, ישאל את עצמו האם הבין, ויחזור לקרוא במידת הצורך",
+        "יאתר מילים קשות ויפרש אותן מתוך ההקשר ובעזרת מילון",
+        "יזהה את נושא הטקסט לפי רמזי תוכן: כותרת, איורים ומילות מפתח"
       ],
       "methods": [
         "עבודה עם מאגר מסקנות נתון, הדהיה הדרגתית שלו",
@@ -655,7 +1005,9 @@
       "domain": "academic",
       "triggeredBy": [
         "st_write_message",
-        "st_write_spelling"
+        "st_write_spelling",
+        "st_write_syntax",
+        "st_write_wordprocessor"
       ],
       "title": "שיפור ההבעה בכתב",
       "gradeBands": [
@@ -666,13 +1018,17 @@
       "objectives": [
         "יכתוב תשובה מלאה במשפט שלם",
         "יכתוב טקסט קצר בעל פתיחה, גוף וסיום",
-        "יגיה את הכתוב לפני ההגשה בעזרת רשימת בדיקה"
+        "יגיה את הכתוב לפני ההגשה בעזרת רשימת בדיקה",
+        "יכתוב תוך שימוש במילות קישור ובמבנה משפט תקין",
+        "יקפיד על רצף זמנים בכתיבה"
       ],
       "methods": [
         "תבנית כתיבה מודפסת עם פתיחי משפט",
         "ארגון רעיונות במפת חשיבה לפני הכתיבה",
         "הכתבה למבוגר ואז העתקה עצמית, כשלב ביניים",
-        "רשימת בדיקה אישית להגהה: אות גדולה, נקודה, האם המשפט שלם"
+        "רשימת בדיקה אישית להגהה: אות גדולה, נקודה, האם המשפט שלם",
+        "בנק מילות קישור מודפס בעמדה האישית",
+        "כתיבה במעבד תמלילים ככלי עזר, עם בודק איות"
       ],
       "criteria": {
         "mid": "יכתוב תשובה מלאה במשפט שלם ב-60% מהמקרים",
@@ -685,7 +1041,8 @@
       "triggeredBy": [
         "st_write_legible",
         "st_write_page_org",
-        "st_fine_tools"
+        "st_fine_tools",
+        "st_write_copy"
       ],
       "title": "שיפור הכתיבה הגרפו־מוטורית והארגון במרחב הדף",
       "gradeBands": [
@@ -812,7 +1169,11 @@
       "triggeredBy": [
         "st_ind_autonomy",
         "st_ind_task_completion",
-        "st_mot_learning"
+        "st_mot_learning",
+        "st_mot_homework",
+        "st_mot_participation",
+        "st_mot_exams",
+        "st_ind_peer_learning"
       ],
       "title": "ביצוע משימה לימודית בהתמדה ובאופן עצמאי",
       "gradeBands": [
@@ -844,7 +1205,9 @@
       "domain": "social_emo",
       "triggeredBy": [
         "st_soc_peer",
-        "st_soc_initiate"
+        "st_soc_initiate",
+        "st_soc_staff",
+        "st_soc_recess"
       ],
       "title": "עידוד יוזמה חברתית מותאמת",
       "gradeBands": [
@@ -910,7 +1273,8 @@
       "triggeredBy": [
         "st_emo_frustration",
         "st_emo_regulation",
-        "st_emo_selfimage"
+        "st_emo_selfimage",
+        "st_soc_loss"
       ],
       "title": "התמודדות עם מצבי קושי ותסכול באופן מותאם",
       "gradeBands": [
@@ -1178,6 +1542,396 @@
         "mid": "ישמור על מרחב אישי בתזכורת ב-60% מהמקרים",
         "end": "ישמור על מרחב אישי ויבקש רשות לפני מגע ב-85% מהמקרים"
       }
+    },
+    {
+      "id": "goal_oral_expression",
+      "domain": "language",
+      "triggeredBy": [
+        "st_lang_clarity",
+        "st_lang_vocab",
+        "st_lang_articulation",
+        "st_lang_relevant",
+        "st_lang_questions"
+      ],
+      "title": "שיפור ההבעה בעל פה והרחבת אוצר המילים",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "objectives": [
+        "יתבטא בעל פה באופן בהיר ומובן",
+        "ירחיב את אוצר המילים בתחומי התוכן הנלמדים וישתמש בו בדיבורו",
+        "ישיב תשובה רלוונטית לשאלה שנשאלה",
+        "ישאל שאלה רלוונטית ביוזמתו"
+      ],
+      "methods": [
+        "קיר מילים כיתתי ומאגר מילים אישי בתחומי התוכן",
+        "תבניות דיבור ופתיחי משפט מודפסים בעמדה האישית",
+        "פיצוח השאלה לפני המענה: מה שואלים ואיזו מילת שאלה",
+        "הרחבת תשובת התלמיד על ידי המורה והחזרתה במשפט מלא",
+        "הקלטה עצמית והאזנה חוזרת"
+      ],
+      "criteria": {
+        "mid": "יתבטא באופן בהיר וישיב תשובה רלוונטית ב-60% מהמקרים",
+        "end": "יתבטא באופן בהיר, ישיב תשובה רלוונטית וישתמש באוצר המילים הנלמד ב-80% מהמקרים"
+      }
+    },
+    {
+      "id": "goal_discourse",
+      "domain": "language",
+      "triggeredBy": [
+        "st_disc_open",
+        "st_disc_join",
+        "st_disc_topic",
+        "st_disc_close",
+        "st_disc_nonverbal",
+        "st_lang_turn",
+        "st_lang_focus"
+      ],
+      "title": "ניהול שיח ותקשורת בין-אישית",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "objectives": [
+        "יפתח שיח ויסיים אותו באופן מותאם",
+        "יצטרף לשיח קיים בעיתוי מתאים",
+        "ימתין לתורו וישמור על נושא השיחה",
+        "יזהה הבעות פנים ושפת גוף ויגיב בהתאם"
+      ],
+      "methods": [
+        "כרטיסיית ניווט עם תבניות דיבור: פתיחת שיחה, הצטרפות וסיום",
+        "סימולציות שיחה בשיעור כישורי חיים",
+        "עבודה עם תמונות והבעות פנים לזיהוי מסרים לא מילוליים",
+        "תיווך בזמן אמת בהפסקה ובכיתה, בהדהיה הדרגתית",
+        "משחקי תור מובנים בקבוצה קטנה"
+      ],
+      "criteria": {
+        "mid": "יפתח שיח וישמור על נושא השיחה בתיווך ב-50% מהמקרים",
+        "end": "יפתח שיח, ימתין לתורו וישמור על נושא השיחה באופן עצמאי ב-75% מהמקרים"
+      }
+    },
+    {
+      "id": "goal_cognitive_executive",
+      "domain": "cognitive",
+      "triggeredBy": [
+        "st_cog_executive",
+        "st_cog_control",
+        "st_cog_time"
+      ],
+      "title": "חיזוק התפקודים הניהוליים והבקרה העצמית",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "objectives": [
+        "יתכנן את שלבי המשימה לפני הביצוע",
+        "יעמוד במטלה בתוך הזמן שהוקצב",
+        "יבדוק את עבודתו בסיום ויתקן טעויות בעזרת רשימת בדיקה"
+      ],
+      "methods": [
+        "כרטיסיית ניווט עם שלבי המשימה, מסומנת בסיום כל שלב",
+        "אומדן זמן לפני תחילת המשימה וטיימר גלוי במהלכה",
+        "רשימת בדיקה אישית להגהה ולבקרה",
+        "פיצול משימה מרובת שלבים לשלבים מסומנים",
+        "חשיבה בקול של המורה כמודל לתכנון"
+      ],
+      "criteria": {
+        "mid": "יתכנן ויבצע משימה דו-שלבית ויבדוק את עצמו ב-60% מהמקרים",
+        "end": "יתכנן ויבצע משימה תלת-שלבית, יעמוד בזמן שהוקצב ויתקן טעויות ב-80% מהמקרים"
+      }
+    },
+    {
+      "id": "goal_cognitive_reasoning",
+      "domain": "cognitive",
+      "triggeredBy": [
+        "st_cog_inference",
+        "st_cog_sorting",
+        "st_cog_main_idea",
+        "st_cog_cause",
+        "st_cog_sequence"
+      ],
+      "title": "פיתוח חשיבה, הסקה והכללה",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "objectives": [
+        "ימיין ויכליל לפי קריטריון נתון, ובהמשך לפי קריטריון שיבחר בעצמו",
+        "יבחין בין עיקר לטפל בטקסט ובסיטואציה",
+        "יסביר יחסי סיבה ותוצאה",
+        "יסיק מסקנה מנתונים נתונים, תחילה ממאגר מסקנות ובהמשך באופן עצמאי"
+      ],
+      "methods": [
+        "מאגר מסקנות נתון, בהדהיה הדרגתית",
+        "משימות מיון עם קריטריון גלוי, ובהמשך עם קריטריון סמוי",
+        "שאלות \"מה גרם ל...\" ו\"מה יקרה אם...\" בשגרת הכיתה",
+        "מפות חשיבה וסידור רצפים בתמונות",
+        "חשיבה בקול של המורה כמודל להסקה"
+      ],
+      "criteria": {
+        "mid": "ימיין לפי קריטריון נתון ויסיק מסקנה בעזרת תיווך ב-60% מהמקרים",
+        "end": "ימיין, יבחין בין עיקר לטפל ויסיק מסקנה באופן עצמאי ב-80% מהמקרים"
+      }
+    },
+    {
+      "id": "goal_behavior_norms",
+      "domain": "social_emo",
+      "triggeredBy": [
+        "st_soc_tolerance",
+        "st_rules_leaving",
+        "st_rules_authority",
+        "st_emo_sensitivity"
+      ],
+      "title": "הפנמת נורמות התנהגות ודרכי תגובה מותאמות",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "objectives": [
+        "יזהה את דרכי התגובה שלו ויציין התנהגות חלופית מותאמת",
+        "יפתח מודעות לכוחה של המילה ולהשפעתה על האחר",
+        "יישאר בכיתה ויצא ברשות",
+        "יקבל את מרות אנשי הצוות ויגיב באופן הולם"
+      ],
+      "methods": [
+        "הצגת מקרים וסיפורים חברתיים לזיהוי דרכי תגובה",
+        "שיח מתווך לאחר האירוע, ולא בזמן ההתרחשות",
+        "בניית מאגר תגובות חלופיות אישי",
+        "תוכנית התנהגות אישית עם סימון יומי",
+        "משחקי תפקידים בשיעור כישורי חיים"
+      ],
+      "criteria": {
+        "mid": "יציין התנהגות חלופית ויפעל לפיה בתיווך ב-50% מהמקרים",
+        "end": "יגיב באופן הולם וישמור על נורמות ההתנהגות ב-80% מהמקרים"
+      }
+    },
+    {
+      "id": "goal_math_geometry",
+      "domain": "academic",
+      "triggeredBy": [
+        "st_math_geometry"
+      ],
+      "title": "זיהוי צורות, מדידה והתמצאות במרחב",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6"
+      ],
+      "objectives": [
+        "יזהה וימיין מצולעים לפי מספר הצלעות והקדקודים",
+        "ימדוד ביחידות מוסכמות בעזרת סרגל",
+        "יחשב היקף של מצולע פשוט"
+      ],
+      "methods": [
+        "עבודה עם צורות מוחשיות, גיאובורד ופיסול צורות",
+        "מדידת חפצים בסביבת הכיתה ורישום התוצאה",
+        "כרטיסיית ניווט עם שמות הצורות ותכונותיהן",
+        "סימון הצלעות בצבע לפני המנייה"
+      ],
+      "criteria": {
+        "mid": "יזהה וימיין מצולעים ב-70% מהמקרים",
+        "end": "יזהה מצולעים, ימדוד ביחידות מוסכמות ויחשב היקף ב-85% מהמקרים"
+      }
+    },
+    {
+      "id": "goal_gross_motor",
+      "domain": "motor_adl",
+      "triggeredBy": [
+        "st_gross_participation"
+      ],
+      "title": "הרחבת ההשתתפות בפעילות תנועתית",
+      "gradeBands": [
+        "1-2",
+        "3-4",
+        "5-6",
+        "7-9"
+      ],
+      "objectives": [
+        "ישתתף בפעילות התנועתית בשיעור החינוך הגופני",
+        "ישתתף במשחק תנועתי עם חברים בהפסקה",
+        "יבצע את רצף התנועות הנדרש במשחק מוכר"
+      ],
+      "methods": [
+        "הכנה מראש והדגמת הפעילות לפני השיעור",
+        "התחלה בתפקיד תומך במשחק, ובהמשך תפקיד פעיל",
+        "משחקים בקבוצה קטנה לפני המליאה",
+        "התאמת דרישות המשימה והפחתת מרכיב התחרות"
+      ],
+      "criteria": {
+        "mid": "ישתתף בפעילות תנועתית ב-60% מהשיעורים",
+        "end": "ישתתף בפעילות תנועתית ב-85% מהשיעורים ובמשחק תנועתי אחד בהפסקה מדי יום"
+      }
+    }
+  ],
+  "trafficLightNote": "רמזור פרופיל תלמיד — המורה מסמנת כל מיומנות בירוק (חוזק), צהוב (חלקי) או כתום (לחיזוק). מיומנות עם st מקושרת להיגד ומפעילה מטרות; מיומנות עם domain בלבד נכנסת לפרופיל אך אינה מפעילה מטרה.",
+  "trafficLight": [
+    {
+      "id": "tl_cognitive",
+      "label": "קוגניטיבי",
+      "skills": [
+        { "label": "הסקת מסקנות", "st": "st_cog_inference" },
+        { "label": "מיון והכללה", "st": "st_cog_sorting" },
+        { "label": "הבחנה בין עיקר לטפל", "st": "st_cog_main_idea" },
+        { "label": "סיבה ותוצאה", "st": "st_cog_cause" },
+        { "label": "הבנת רצפים", "st": "st_cog_sequence" },
+        { "label": "הבנת הוראות בעל פה", "st": "st_instructions" },
+        { "label": "שמירת קשב וריכוז", "st": "st_att_focus" },
+        { "label": "יכולת הגדרה", "domain": "cognitive" },
+        { "label": "חשיבה ביקורתית", "domain": "cognitive" },
+        { "label": "פתרון בעיות", "domain": "cognitive" }
+      ]
+    },
+    {
+      "id": "tl_reading",
+      "label": "קריאה",
+      "skills": [
+        { "label": "קריאה מדויקת", "st": "st_read_accuracy" },
+        { "label": "שטף בקריאה", "st": "st_read_fluency" },
+        { "label": "התייחסות לסימני פיסוק", "st": "st_read_punctuation" },
+        { "label": "הפקת משמעות ברובד הגלוי", "st": "st_comp_details" },
+        { "label": "הפקת משמעות ברובד הסמוי", "st": "st_comp_inference" },
+        { "label": "מציאת רעיון מרכזי", "st": "st_comp_main_idea" },
+        { "label": "שחזור טקסט", "st": "st_comp_retell" },
+        { "label": "תהליכי בקרה להבנה", "st": "st_comp_monitoring" },
+        { "label": "פענוח מילים לא מוכרות", "st": "st_comp_vocab" },
+        { "label": "קצב קריאה ועבודה", "domain": "academic" },
+        { "label": "קריאת ספר", "domain": "academic" }
+      ]
+    },
+    {
+      "id": "tl_writing",
+      "label": "כתיבה",
+      "skills": [
+        { "label": "קריאוּת כתב היד", "st": "st_write_legible" },
+        { "label": "ארגון וסדר במרחב הדף ובמחברות", "st": "st_write_page_org" },
+        { "label": "העתקה מהלוח", "st": "st_write_copy" },
+        { "label": "מובנות הכתיב", "st": "st_write_spelling" },
+        { "label": "הבעת מסר ברור וקוהרנטי בכתב", "st": "st_write_message" },
+        { "label": "תחביר ומבנה משפט", "st": "st_write_syntax" },
+        { "label": "כתיבה במעבד תמלילים", "st": "st_write_wordprocessor" },
+        { "label": "כתיבת תשובה לשאלה", "domain": "academic" },
+        { "label": "כתיבת סיכום ותמצית", "domain": "academic" }
+      ]
+    },
+    {
+      "id": "tl_oral",
+      "label": "הבעה בעל פה",
+      "skills": [
+        { "label": "הבעת דעה באופן ברור", "st": "st_lang_clarity" },
+        { "label": "אוצר מילים", "st": "st_lang_vocab" },
+        { "label": "מיקוד בשיח", "st": "st_lang_focus" },
+        { "label": "דיבור ברור (היגוי)", "st": "st_lang_articulation" },
+        { "label": "מענה רלוונטי לשאלות", "st": "st_lang_relevant" },
+        { "label": "יכולת לשאול שאלות", "st": "st_lang_questions" },
+        { "label": "שמירה על תור בשיח", "st": "st_lang_turn" },
+        { "label": "יזימת שיחה", "st": "st_disc_open" },
+        { "label": "העברת מסר קוהרנטי", "domain": "language" },
+        { "label": "נתינת מידע מותאם לידע המאזין", "domain": "language" },
+        { "label": "אינטונציה מותאמת", "domain": "language" },
+        { "label": "יכולת שכנוע", "domain": "language" }
+      ]
+    },
+    {
+      "id": "tl_math",
+      "label": "מתמטיקה",
+      "skills": [
+        { "label": "מנייה וספירה", "st": "st_math_counting" },
+        { "label": "הבנת מבנה עשרוני וערך הספרה", "st": "st_math_place_value" },
+        { "label": "השוואת מספרים", "st": "st_math_compare" },
+        { "label": "פעולות חיבור וחיסור", "st": "st_math_addsub" },
+        { "label": "המרה ופריטה במאונך", "st": "st_math_regrouping" },
+        { "label": "בעיות מילוליות", "st": "st_math_word_problems" },
+        { "label": "צורות ומדידות", "st": "st_math_geometry" },
+        { "label": "עובדות יסוד בחיבור וחיסור בעל פה (עד 20)", "domain": "academic" },
+        { "label": "כפל וחילוק בעל פה — עובדות יסוד (עד 100)", "domain": "academic" },
+        { "label": "כפל וחילוק במאונך", "domain": "academic" },
+        { "label": "סדר גודל ואומדן", "domain": "academic" },
+        { "label": "סדר פעולות חשבון", "domain": "academic" },
+        { "label": "שברים פשוטים", "domain": "academic" }
+      ]
+    },
+    {
+      "id": "tl_learner",
+      "label": "תלמידאות",
+      "skills": [
+        { "label": "ציוד כנדרש והוצאה והכנסה", "st": "st_org_materials" },
+        { "label": "הגעה בזמן וביקור סדיר", "st": "st_org_punctual" },
+        { "label": "הצבעה והשתתפות פעילה בשיעור", "st": "st_mot_participation" },
+        { "label": "הכנת שיעורי בית ומשימות הגשה", "st": "st_mot_homework" },
+        { "label": "התכוננות לבחינות", "st": "st_mot_exams" },
+        { "label": "מוטיבציה ללמידה", "st": "st_mot_learning" },
+        { "label": "התנהלות עצמאית", "st": "st_ind_autonomy" },
+        { "label": "ביצוע משימות במהלך השיעור", "st": "st_ind_task_completion" },
+        { "label": "שיתוף פעולה בלמידת עמיתים", "st": "st_ind_peer_learning" },
+        { "label": "תפקוד בחלק הפרונטלי של השיעור", "st": "st_att_frontal" },
+        { "label": "תפקודים ניהוליים — תכנון וארגון", "st": "st_cog_executive" },
+        { "label": "בקרה עצמית ותיקון טעויות", "st": "st_cog_control" },
+        { "label": "ניהול זמן ועמידה במטלה", "st": "st_cog_time" },
+        { "label": "יכולת בקשת עזרה כשצריך", "st": "st_self_advocacy" },
+        { "label": "הרגלי עבודה", "domain": "learner" }
+      ]
+    },
+    {
+      "id": "tl_behavior",
+      "label": "התנהגותי רגשי",
+      "skills": [
+        { "label": "התנהגות על פי הכללים", "st": "st_rules_norms" },
+        { "label": "התנהגות הולמת לחברים", "st": "st_soc_tolerance" },
+        { "label": "התנהגות הולמת למורים וקבלת סמכות", "st": "st_rules_authority" },
+        { "label": "יציאה מהכיתה ברשות", "st": "st_rules_leaving" },
+        { "label": "שמירת מרחב פיזי", "st": "st_personal_space" },
+        { "label": "התמודדות עם שינויים ומעברים", "st": "st_rules_transitions" },
+        { "label": "התמודדות עם תסכולים", "st": "st_emo_frustration" },
+        { "label": "ויסות רגשי ומצב רוח", "st": "st_emo_regulation" },
+        { "label": "דימוי עצמי חיובי", "st": "st_emo_selfimage" },
+        { "label": "רגישות לסביבה", "st": "st_emo_sensitivity" },
+        { "label": "אקטיביות ותחושת מסוגלות", "st": "st_self_strengths" },
+        { "label": "קבלת ביקורת", "st": "st_self_criticism" },
+        { "label": "דחיית סיפוקים", "st": "st_delay_gratification" }
+      ]
+    },
+    {
+      "id": "tl_social",
+      "label": "חברתי",
+      "skills": [
+        { "label": "יצירת קשרים עם חברים", "st": "st_soc_peer" },
+        { "label": "יוזמה חברתית", "st": "st_soc_initiate" },
+        { "label": "הבנת סיטואציות חברתיות", "st": "st_soc_situations" },
+        { "label": "פתרון בעיות חברתיות", "st": "st_soc_conflict" },
+        { "label": "התמודדות עם הפסד", "st": "st_soc_loss" },
+        { "label": "המצאות עם חברים בהפסקות", "st": "st_soc_recess" },
+        { "label": "קשר עם הצוות החינוכי", "st": "st_soc_staff" },
+        { "label": "היענות לפנייה והצטרפות לשיח", "st": "st_disc_join" },
+        { "label": "שמירה על נושא השיח", "st": "st_disc_topic" },
+        { "label": "סיום שיח", "st": "st_disc_close" },
+        { "label": "קריאת שפת גוף והבעות פנים", "st": "st_disc_nonverbal" },
+        { "label": "יכולת אמפתיה — עידוד, ניחום, מתן עזרה", "domain": "social_emo" },
+        { "label": "גמישות במהלך פעילות חברתית", "domain": "social_emo" },
+        { "label": "הצטרפות למשימות בקבוצה", "domain": "social_emo" }
+      ]
+    },
+    {
+      "id": "tl_motor",
+      "label": "מוטורי ו-ADL",
+      "skills": [
+        { "label": "שימוש בכלי כתיבה ובציוד", "st": "st_fine_tools" },
+        { "label": "השתתפות בפעילות תנועתית", "st": "st_gross_participation" },
+        { "label": "תפקוד יומיומי עצמאי", "st": "st_adl_independence" },
+        { "label": "מיומנויות אכילה", "st": "st_adl_eating" },
+        { "label": "התמצאות וניידות במרחב בית הספר", "domain": "motor_adl" },
+        { "label": "התארגנות בלבוש ובציוד אישי", "domain": "motor_adl" }
+      ]
     }
   ]
 }

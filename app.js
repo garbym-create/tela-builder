@@ -9,7 +9,12 @@ BANK.statements.forEach(function (s) { ST[s.id] = s; });
 var BY_SUB = {};
 BANK.statements.forEach(function (s) { (BY_SUB[s.subdomain] = BY_SUB[s.subdomain] || []).push(s); });
 var DOM_LABEL = {};
-BANK.domains.forEach(function (d) { DOM_LABEL[d.id] = d.label; });
+var SUB_DOM = {};   // subdomain -> domain id
+BANK.domains.forEach(function (d) {
+  DOM_LABEL[d.id] = d.label;
+  (d.subdomains || []).forEach(function (s) { SUB_DOM[s] = d.id; });
+});
+function domainOfStatement(id) { return ST[id] ? SUB_DOM[ST[id].subdomain] : null; }
 
 /* ---------- הגדרות תוכן ---------- */
 
@@ -33,22 +38,31 @@ var SETTINGS = [
 ];
 
 var DOMAIN_CARDS = [
-  { id: 'academic',   icon: '📘', label: 'לימודי',              sub: 'קריאה · כתיבה · שפה · מתמטיקה' },
+  { id: 'cognitive',  icon: '🧠', label: 'קוגניטיבי',            sub: 'הסקה · מיון והכללה · תפקודים ניהוליים' },
+  { id: 'academic',   icon: '📘', label: 'לימודי',              sub: 'קריאה · כתיבה · מתמטיקה' },
   { id: 'learner',    icon: '🎒', label: 'תלמידאות ועצמאות',    sub: 'התארגנות · קשב · עבודה עצמאית' },
-  { id: 'social_emo', icon: '💬', label: 'חברתי ורגשי',          sub: 'קשרים · ויסות · כללים' },
+  { id: 'social_emo', icon: '🤝', label: 'חברתי ורגשי',          sub: 'קשרים · ויסות · כללים' },
+  { id: 'language',   icon: '🗣', label: 'שפתי-תקשורתי',        sub: 'הבעה בעל פה · ניהול שיח' },
   { id: 'motor_adl',  icon: '✋', label: 'מוטורי ו-ADL',         sub: 'מוטוריקה · ניידות · תפקוד יומיומי' }
 ];
 
 /* תחומי משנה: כל אחד מוביל לתת-תחום אחד או לשאלת הסתעפות */
 var SUBAREAS = {
+  cognitive: [
+    { v: 'reasoning', label: 'חשיבה, הסקה והכללה', sd: 'cognitive_reasoning' },
+    { v: 'executive', label: 'תפקודים ניהוליים ובקרה עצמית', sd: 'cognitive_executive' }
+  ],
+  language: [
+    { v: 'oral',      label: 'הבעה בעל פה ואוצר מילים', sd: 'language_oral' },
+    { v: 'discourse', label: 'ניהול שיח ותקשורת', sd: 'discourse' }
+  ],
   academic: [
     { v: 'reading', label: 'קריאה', branch: 'הקושי בפענוח ובשטף, או בהבנת הנקרא?',
       opts: [{ v: 'reading_fluency', label: 'פענוח ושטף' }, { v: 'reading_comprehension', label: 'הבנת הנקרא' }] },
     { v: 'writing', label: 'כתיבה', branch: 'הקושי בכתב היד ובארגון הדף, או בהבעה בכתב?',
       opts: [{ v: 'writing_motor', label: 'כתב יד וארגון הדף' }, { v: 'writing_expression', label: 'הבעה בכתב וכתיב' }] },
     { v: 'math', label: 'מתמטיקה', branch: 'הקושי במושג המספר, או בפעולות ובבעיות?',
-      opts: [{ v: 'math_numbers', label: 'מושג המספר ומבנה עשרוני' }, { v: 'math_operations', label: 'פעולות ובעיות מילוליות' }, { v: 'math_geometry', label: 'צורות ומדידות' }] },
-    { v: 'language', label: 'שפה בעל פה', sd: 'language_oral' }
+      opts: [{ v: 'math_numbers', label: 'מושג המספר ומבנה עשרוני' }, { v: 'math_operations', label: 'פעולות ובעיות מילוליות' }, { v: 'math_geometry', label: 'צורות ומדידות' }] }
   ],
   learner: [
     { v: 'organization', label: 'התארגנות וציוד', sd: 'organization' },
@@ -72,6 +86,8 @@ var SUBAREAS = {
 };
 
 var EXAMPLE_PLACEHOLDER = {
+  cognitive:  'לדוגמה: בשיעור מדעים ביקשתי למיין בעלי חיים לפי בית גידול. היא מיינה יפה לפי הקריטריון שנתתי, אבל כשביקשתי למצוא קריטריון אחר בעצמה — נתקעה.',
+  language:   'לדוגמה: בשיחת בוקר הוא רוצה לספר משהו, מתחיל באמצע הסיפור בלי להגיד על מי מדובר, והילדים לא מבינים ומאבדים עניין.',
   academic:   'לדוגמה: בשיעור חשבון, כשיש בעיה מילולית בת שתי שורות, הוא קורא אותה, מסתכל עליי ואומר "אני לא מבין מה עושים". אם אני מקריאה ומציירת — פותר לבד.',
   learner:    'לדוגמה: בתחילת השיעור כולם מוציאים מחברת, והיא עדיין מחפשת בתיק. אחרי כשבע דקות עוד לא התחילה, גם אם הזכרתי פעמיים.',
   social_emo: 'לדוגמה: בהפסקה הוא עומד ליד המשחק ומסתכל, ולא ניגש לבקש להצטרף. כשילד אחר מזמין אותו — הוא משחק בשמחה עשר דקות.',
@@ -89,6 +105,14 @@ var WORKED_OPTIONS = [
 var PROVIDERS = ['מורת שילוב','סייעת','טיפול פרטני','מורה מקצועית','צוות פארא-רפואי','אחר'];
 
 var EVAL = {
+  cognitive: {
+    mid: 'תצפית מובנית במשימות חשיבה, רישום מידת התיווך הנדרשת בכל משימה, ודגימות ביצוע אחת לשבועיים.',
+    end: 'משימת חשיבה מסכמת ללא תיווך, השוואה למידת התיווך בתחילת התקופה וסיכום בישיבת הצוות.'
+  },
+  language: {
+    mid: 'תצפית בשיח הכיתתי ובהפסקה, הקלטות קצרות של הבעה בעל פה, ורישום במחוון שיח אישי.',
+    end: 'הערכת שיח מסכמת, השוואה להקלטות הפתיחה, ומשוב מהקלינאית או מהיועצת במידת הצורך.'
+  },
   academic: {
     mid: 'תצפית שבועית בשיעור, דגימות ביצוע במחברת ורישום במחוון אישי. משוב מיידי לתלמיד/ה בסיום כל מטלה.',
     end: 'מבדק תואם רמה בסוף התקופה, השוואה לנתוני הפתיחה, סיכום המחוונים ודיווח בישיבת הצוות.'
@@ -114,9 +138,9 @@ var PERIOD_END = 'עד סוף שנת הלימודים';
 
 var S = null;
 function blankState() {
-  return { grade: '', disability: '', disability_note: '', setting: '', prior: '', prior_note: '',
-           domains: [], d: {}, o: {}, worked: [], worked_note: '', hours: '', providers: [],
-           profile: null, tables: null, step: 0 };
+  return { mode: 'interview', grade: '', disability: '', disability_note: '', setting: '', prior: '', prior_note: '',
+           domains: [], d: {}, o: {}, tl: {}, worked: [], worked_note: '', hours: '', providers: [],
+           ident: {}, profile: null, tables: null, step: 0 };
 }
 
 var KEY = 'tela.draft.v1';
@@ -163,6 +187,16 @@ function buildSteps() {
   steps.push({ key: 'prior', kind: 'single', q: 'יש תוכנית קודמת או אבחון עדכני?',
                options: [{ v: 'yes', label: 'כן' }, { v: 'no', label: 'לא' }],
                noteIf: 'yes', notePlaceholder: 'מה עלה בתוכנית הקודמת או באבחון? מה כדאי להמשיך?' });
+  if (S.mode === 'radar') {
+    steps.push({ key: 'radar', kind: 'radar', q: 'רמזור פרופיל התלמיד/ה',
+                 sub: 'סמנו כל מיומנות: 🟢 חוזק · 🟡 חלקי · 🟠 לחיזוק. אפשר לדלג על מה שלא רלוונטי.' });
+    steps.push({ key: 'worked', kind: 'multi', q: 'מה כבר ניסיתם והצליח, ולו חלקית?',
+                 sub: 'זה הבסיס לעמודת הדרכים והאמצעים. אפשר לבחור כמה שרוצים.', note: true,
+                 options: WORKED_OPTIONS.map(function (x) { return { v: x, label: x }; }) });
+    steps.push({ key: 'support', kind: 'support', q: 'כמה שעות תמיכה שבועיות, ומי נותן אותן?' });
+    return steps;
+  }
+
   steps.push({ key: 'domains', kind: 'cards', q: 'באילו תחומים הקושי המרכזי?',
                sub: 'אפשר לבחור עד שלושה. התחומים שייבחרו יקבלו שאלות עומק.', max: 3 });
 
@@ -180,7 +214,7 @@ function buildSteps() {
     }
     var sd = chosenSubdomain(domId);
     if (sd) {
-      (BY_SUB[sd] || []).slice(0, 3).forEach(function (st) {
+      (BY_SUB[sd] || []).slice(0, 5).forEach(function (st) {
         steps.push({ key: base + '.r.' + st.id, kind: 'single', tag: DOM_LABEL[domId],
                      q: st.prompt, sub: 'מה מתאר הכי טוב את המצב היום?', stack: true, note: true,
                      options: [
@@ -278,7 +312,7 @@ function buildTable(goal) {
 
 function buildProfile() {
   var strengths = [], needs = [];
-  (S.domains || []).forEach(function (domId) {
+  Object.keys(S.d || {}).forEach(function (domId) {
     var r = ratingsOf(domId);
     Object.keys(r).forEach(function (id) {
       var st = ST[id]; if (!st) return;
@@ -293,6 +327,16 @@ function buildProfile() {
   Object.keys(S.o || {}).forEach(function (k) {
     var note = get('o.' + k + '_note');
     if (S.o[k] === 'note' && note) needs.push(DOM_LABEL[k] + ': ' + note);
+  });
+  /* מיומנויות מהרמזור שאין להן היגד בבנק — נכנסות לפרופיל בלבד */
+  (BANK.trafficLight || []).forEach(function (col) {
+    col.skills.forEach(function (sk, i) {
+      if (sk.st) return;
+      var v = get('tl.' + col.id + ':' + i);
+      if (v === 'strength') strengths.push(sk.label);
+      else if (v === 'partial') needs.push(sk.label + ' — קיים באופן חלקי');
+      else if (v === 'weakness') needs.push(sk.label + ' — לחיזוק');
+    });
   });
   if (S.prior === 'yes' && S.prior_note) strengths.push('מתוך התוכנית הקודמת: ' + S.prior_note);
 
@@ -352,17 +396,25 @@ function renderHome() {
   var w = el('div', 'home');
   w.appendChild(el('div', 'logo', 'תל״א · תח״י'));
   w.appendChild(el('h1', null, 'בונה תל״א – תח״י'));
-  w.appendChild(el('p', 'lead', 'מיפוי של שלוש דקות, ובסוף תוכנית מוכנה להגשה.'));
-  var b = el('button', 'btn primary big', 'התחלה');
+  w.appendChild(el('p', 'lead', 'מיפוי קצר, ובסוף תוכנית מוכנה להגשה.'));
+  var b = el('button', 'btn primary big', 'ראיון מונחה');
   b.onclick = function () { S = blankState(); save(); screen = 'q'; render(); };
   w.appendChild(b);
+  w.appendChild(el('p', 'modehint', 'שאלה אחת בכל מסך, לפי התחומים שתבחרו. כשש דקות.'));
+
+  var b3 = el('button', 'btn', 'מיפוי רמזור — טבלה מלאה');
+  b3.onclick = function () {
+    S = blankState(); S.mode = 'radar'; radarOpen = null; save(); screen = 'q'; render();
+  };
+  w.appendChild(b3);
+  w.appendChild(el('p', 'modehint', 'כל המיומנויות בטבלה אחת, לסימון בירוק · צהוב · כתום.'));
   var draft = loadDraft();
   if (draft && (draft.grade || (draft.domains && draft.domains.length))) {
     var b2 = el('button', 'btn ghost', 'המשך טיוטה שמורה');
     b2.onclick = function () { S = draft; screen = S.tables ? 'result' : 'q'; render(); };
     w.appendChild(b2);
   }
-  w.appendChild(el('p', 'privacy', '🔒 הנתונים נשארים במכשיר שלך.'));
+  w.appendChild(el('p', 'privacy', '🔒 הנתונים נשארים במכשיר שלך. גם שם התלמיד/ה אינו נשלח לשום מקום.'));
   w.appendChild(credit());
   app.appendChild(w);
 }
@@ -404,6 +456,7 @@ function renderQuestion() {
   else if (st.kind === 'cards') renderCards(card, st);
   else if (st.kind === 'text') renderText(card, st);
   else if (st.kind === 'support') renderSupport(card, st);
+  else if (st.kind === 'radar') renderRadar(card, st);
 
   app.appendChild(card);
   var f = card.querySelector('button, textarea');
@@ -570,6 +623,105 @@ function renderSupport(card, st) {
   nextBtn(card, 'סיום המיפוי', function () { goto(S.step + 1); });
 }
 
+/* ---------- רמזור פרופיל תלמיד ---------- */
+
+var RADAR_LEVELS = [
+  { v: 'strength', label: 'חוזק',  dot: '🟢', cls: 'g' },
+  { v: 'partial',  label: 'חלקי',  dot: '🟡', cls: 'y' },
+  { v: 'weakness', label: 'לחיזוק', dot: '🟠', cls: 'o' }
+];
+
+var radarOpen = null;   // מזהה העמודה הפתוחה
+
+function radarPathOf(skill, colId, idx) {
+  if (skill.st) {
+    var dom = domainOfStatement(skill.st);
+    return dom ? 'd.' + dom + '.r.' + skill.st : null;
+  }
+  return 'tl.' + colId + ':' + idx;
+}
+
+function radarMarkedCount(col) {
+  var n = 0;
+  col.skills.forEach(function (sk, i) {
+    var p = radarPathOf(sk, col.id, i);
+    if (p && get(p)) n++;
+  });
+  return n;
+}
+
+function renderRadar(card, st) {
+  var total = 0, marked = 0;
+  BANK.trafficLight.forEach(function (col) {
+    total += col.skills.length;
+    marked += radarMarkedCount(col);
+  });
+
+  var summary = el('p', 'counter', 'סומנו ' + marked + ' מיומנויות מתוך ' + total);
+  card.appendChild(summary);
+
+  if (radarOpen === null) radarOpen = BANK.trafficLight[0].id;
+
+  BANK.trafficLight.forEach(function (col) {
+    var box = el('div', 'tlcol');
+    var open = radarOpen === col.id;
+    var head = el('button', 'tlhead' + (open ? ' on' : ''));
+    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+    head.appendChild(el('span', 'tlname', col.label));
+    var cnt = radarMarkedCount(col);
+    head.appendChild(el('span', 'tlcount', cnt + '/' + col.skills.length));
+    head.appendChild(el('span', 'tlarrow', open ? '⌃' : '⌄'));
+    head.onclick = function () { radarOpen = open ? null : col.id; render(); };
+    box.appendChild(head);
+
+    if (open) {
+      var rows = el('div', 'tlrows');
+      col.skills.forEach(function (sk, i) {
+        var path = radarPathOf(sk, col.id, i);
+        var cur = path ? get(path) : null;
+        var row = el('div', 'tlrow');
+        row.appendChild(el('span', 'tllbl', sk.label));
+        var group = el('span', 'tlbtns');
+        group.setAttribute('role', 'group');
+        group.setAttribute('aria-label', sk.label);
+        RADAR_LEVELS.forEach(function (lv) {
+          var b = el('button', 'tlb ' + lv.cls + (cur === lv.v ? ' on' : ''));
+          b.textContent = lv.dot;
+          b.title = lv.label;
+          b.setAttribute('aria-label', sk.label + ' — ' + lv.label);
+          b.setAttribute('aria-pressed', cur === lv.v ? 'true' : 'false');
+          b.onclick = function () {
+            if (!path) return;
+            set(path, cur === lv.v ? '' : lv.v);
+            render();
+          };
+          group.appendChild(b);
+        });
+        row.appendChild(group);
+        rows.appendChild(row);
+      });
+      box.appendChild(rows);
+    }
+    card.appendChild(box);
+  });
+
+  nextBtn(card, marked ? 'סיום המיפוי' : 'דילוג', function () { goto(S.step + 1); });
+}
+
+/* דירוג התחומים לפי חומרת הקשיים שסומנו ברמזור */
+function radarDomains() {
+  var score = {};
+  Object.keys(S.d || {}).forEach(function (dom) {
+    var r = (S.d[dom] || {}).r || {}, sc = 0;
+    Object.keys(r).forEach(function (id) {
+      if (r[id] === 'weakness') sc += 3;
+      else if (r[id] === 'partial') sc += 2;
+    });
+    if (sc > 0) score[dom] = sc;
+  });
+  return Object.keys(score).sort(function (a, b) { return score[b] - score[a]; });
+}
+
 /* ---------- מסך סיכום ---------- */
 
 function renderSummary() {
@@ -584,6 +736,7 @@ function renderSummary() {
   card.appendChild(el('h2', null, 'פרופיל התלמיד/ה'));
   card.appendChild(el('p', 'sub', 'אפשר לערוך כל שדה לפני ההפקה. לחיצה על העיפרון פותחת עריכה.'));
 
+  addIdentCard(card);
   addProfileCard(card, 'כיתה ומסגרת', 'grade', [p.grade]);
   addProfileCard(card, 'אפיון', 'disability', [p.disability]);
   addProfileCard(card, 'מוקדי כוח', 'strengths', p.strengths);
@@ -593,6 +746,48 @@ function renderSummary() {
 
   nextBtn(card, 'אישור והפקת התוכנית', function () { produce(); });
   app.appendChild(card);
+}
+
+var IDENT_FIELDS = [
+  { k: 'name',    label: 'שם התלמיד/ה' },
+  { k: 'teacher', label: 'מחנכ/ת הכיתה' },
+  { k: 'year',    label: 'שנת לימודים' },
+  { k: 'date',    label: 'תאריך' },
+  { k: 'filler',  label: 'שם ממלא/ת הדוח ותפקידו' }
+];
+
+function addIdentCard(parent) {
+  var box = el('div', 'pcard');
+  box.appendChild(el('span', 'ptitle', 'פרטי זיהוי'));
+  box.appendChild(el('p', 'identnote', 'אופציונלי. נכנס לכותרת המסמכים ונשמר במכשיר שלך בלבד.'));
+  var grid = el('div', 'identgrid');
+  IDENT_FIELDS.forEach(function (f) {
+    var wrap = el('label', 'identfield');
+    wrap.appendChild(el('span', null, f.label));
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.value = get('ident.' + f.k) || '';
+    inp.setAttribute('aria-label', f.label);
+    inp.oninput = function () { set('ident.' + f.k, inp.value); };
+    wrap.appendChild(inp);
+    grid.appendChild(wrap);
+  });
+  box.appendChild(grid);
+  parent.appendChild(box);
+}
+
+function identLine() {
+  var parts = [];
+  IDENT_FIELDS.forEach(function (f) {
+    var v = get('ident.' + f.k);
+    if (v) parts.push(f.label + ': ' + v);
+  });
+  return parts;
+}
+
+function fileStem() {
+  var name = get('ident.name');
+  return (name ? name + ' — ' : '') + (S.grade ? 'כיתה ' + S.grade : 'תוכנית');
 }
 
 function addProfileCard(parent, title, key, items) {
@@ -635,6 +830,12 @@ var LOAD_MSGS = ['קורא את הפרופיל…','בוחר מטרות שמתא
 
 function produce() {
   screen = 'loading'; render();
+  S.deferred = [];
+  if (S.mode === 'radar') {
+    var ranked = radarDomains();
+    S.domains = ranked.slice(0, 3);
+    S.deferred = ranked.slice(3).map(function (d) { return DOM_LABEL[d]; });
+  }
   var used = [], tables = [], skipped = [];
   (S.domains || []).forEach(function (domId) {
     var g = pickGoal(domId, used);
@@ -688,6 +889,13 @@ function renderResult() {
       'לא סומן קושי שמפעיל מטרה מהמאגר, ולכן לא נוצרה מטרה יש מאין. אפשר להוסיף מטרה מהמאגר בכפתור למטה.'));
     app.appendChild(n);
   }
+  if ((S.deferred || []).length) {
+    var n2 = el('div', 'notice');
+    n2.appendChild(el('strong', null, 'סומנו קשיים גם בתחום ' + S.deferred.join(' וב') + '. '));
+    n2.appendChild(document.createTextNode(
+      'התוכנית נבנתה סביב שלושת התחומים שבהם הקושי החריף ביותר, כדי שתישאר ברת-ביצוע. כל הקשיים נשמרו בפרופיל, ואפשר להוסיף מטרה נוספת בכפתור למטה.'));
+    app.appendChild(n2);
+  }
 
   S.tables.forEach(function (tb, ti) {
     var box = el('div', 'tbox enter');
@@ -724,7 +932,8 @@ function renderResult() {
   });
 
   var acts = el('div', 'actions');
-  addAct(acts, 'הורדה כ-Word', 'primary', downloadDocx);
+  addAct(acts, 'הורדת התוכנית כ-Word', 'primary', downloadPlanDocx);
+  addAct(acts, 'הורדת פרופיל תלמיד/ה כ-Word', '', downloadProfileDocx);
   addAct(acts, 'העתקה ללוח', '', copyAll);
   addAct(acts, 'הוספת מטרה נוספת', '', addGoalDialog);
   addAct(acts, 'התחלת תלמיד/ה חדש/ה', 'ghost', function () {
@@ -781,7 +990,7 @@ function addGoalDialog() {
 
 function planText() {
   var pt = programLabel();
-  var out = [pt.fullName + ' (' + pt.label + ')', S.profile.grade, ''];
+  var out = [pt.fullName + ' (' + pt.label + ')'].concat(identLine(), [S.profile.grade, '']);
   out.push('מוקדי כוח: ' + S.profile.strengths.join('; '));
   out.push('מוקדים לחיזוק: ' + S.profile.needs.join('; '));
   out.push('מה שכבר עובד: ' + S.profile.worked.join('; '));
@@ -842,11 +1051,98 @@ function wcell(lines, width, opts) {
          '<w:vAlign w:val="top"/></w:tcPr>' + body + '</w:tc>';
 }
 
-function docXml() {
+function wtable(rows, borders) {
+  var b = '<w:tblBorders>' +
+    ['top','left','bottom','right','insideH','insideV'].map(function (x) {
+      return '<w:' + x + ' w:val="single" w:sz="6" w:space="0" w:color="9AA6A3"/>';
+    }).join('') + '</w:tblBorders>';
+  return '<w:tbl><w:tblPr><w:bidiVisual/><w:tblW w:w="' + (borders || 14300) + '" w:type="dxa"/>' + b +
+    '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="80" w:type="dxa"/>' +
+    '<w:bottom w:w="60" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr>' +
+    rows + '</w:tbl>';
+}
+
+function docShell(body, landscape) {
+  var pg = landscape
+    ? '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>'
+    : '<w:pgSz w:w="11906" w:h="16838"/>';
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    '<w:body>' + body +
+    '<w:sectPr>' + pg +
+    '<w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720"/><w:bidi/></w:sectPr>' +
+    '</w:body></w:document>';
+}
+
+/* מסמך הפרופיל — תחום | מוקדי כוח | מוקדים לחיזוק, לפי "פרופיל תלמיד מלא לדוגמה" */
+function profileDocXml() {
+  var body = '';
+  body += wp('פרופיל תלמיד/ה — בסיס לכתיבת ' + programLabel().fullName, { bold: true, size: 32 });
+  identLine().forEach(function (l) { body += wp(l, { size: 22 }); });
+  body += wp(S.profile.grade + ' · ' + S.profile.disability, { size: 22 });
+  body += wp('');
+
+  var w = [2400, 4200, 4200];
+  var rows = '<w:tr><w:trPr><w:tblHeader/></w:trPr>' +
+    ['תחום', 'מוקדי כוח', 'מוקדים לחיזוק'].map(function (c, i) {
+      return wcell(c, w[i], { bold: true, shade: true, size: 20 });
+    }).join('') + '</w:tr>';
+
+  var byDom = domainSplit();
+  BANK.domains.forEach(function (d) {
+    var e = byDom[d.id];
+    if (!e || (!e.strengths.length && !e.needs.length)) return;
+    rows += '<w:tr>' +
+      wcell(d.label, w[0], { bold: true, size: 20 }) +
+      wcell(e.strengths.length ? e.strengths : ['—'], w[1], { size: 20 }) +
+      wcell(e.needs.length ? e.needs : ['—'], w[2], { size: 20 }) + '</w:tr>';
+  });
+  body += wtable(rows, 10800);
+  body += wp('');
+  body += wp('מה שכבר עובד: ' + S.profile.worked.join('; '), { size: 22 });
+  body += wp('משאבי תמיכה: ' + S.profile.support.join('; '), { size: 22 });
+  body += wp('');
+  body += wp(CREDIT, { size: 18 });
+  return docShell(body, false);
+}
+
+/* פילוח מוקדי הכוח והחיזוק לפי תחום, מתוך הסימונים עצמם */
+function domainSplit() {
+  var out = {};
+  BANK.domains.forEach(function (d) { out[d.id] = { strengths: [], needs: [] }; });
+  Object.keys(S.d || {}).forEach(function (dom) {
+    if (!out[dom]) return;
+    var r = ratingsOf(dom);
+    Object.keys(r).forEach(function (id) {
+      var s = ST[id]; if (!s || !r[id]) return;
+      if (r[id] === 'strength') out[dom].strengths.push(s.strength);
+      else out[dom].needs.push(s[r[id]]);
+    });
+    var ex = get('d.' + dom + '.example');
+    if (ex) out[dom].needs.push('דוגמה מהשיעור: ' + ex);
+  });
+  (BANK.trafficLight || []).forEach(function (col) {
+    col.skills.forEach(function (sk, i) {
+      if (sk.st || !out[sk.domain]) return;
+      var v = get('tl.' + col.id + ':' + i);
+      if (v === 'strength') out[sk.domain].strengths.push(sk.label);
+      else if (v === 'partial') out[sk.domain].needs.push(sk.label + ' — קיים באופן חלקי');
+      else if (v === 'weakness') out[sk.domain].needs.push(sk.label + ' — לחיזוק');
+    });
+  });
+  Object.keys(S.o || {}).forEach(function (k) {
+    var note = get('o.' + k + '_note');
+    if (S.o[k] === 'note' && note && out[k]) out[k].needs.push(note);
+  });
+  return out;
+}
+
+function planDocXml() {
   var pt = programLabel();
   var widths = [2600, 1300, 3400, 2600, 2200, 2200];
   var body = '';
   body += wp(pt.fullName + ' — ' + pt.label, { bold: true, size: 32 });
+  identLine().forEach(function (l) { body += wp(l, { size: 22 }); });
   body += wp(S.profile.grade + ' · ' + S.profile.disability, { size: 24 });
   body += wp('');
   body += wp('מוקדי כוח: ' + S.profile.strengths.join('; '), { size: 22 });
@@ -868,25 +1164,12 @@ function docXml() {
         wcell(r.formative, widths[4], { size: 20 }) +
         wcell(r.summative, widths[5], { size: 20 }) + '</w:tr>';
     });
-    var borders = '<w:tblBorders>' +
-      ['top','left','bottom','right','insideH','insideV'].map(function (b) {
-        return '<w:' + b + ' w:val="single" w:sz="6" w:space="0" w:color="9AA6A3"/>';
-      }).join('') + '</w:tblBorders>';
-    body += '<w:tbl><w:tblPr><w:bidiVisual/><w:tblW w:w="14300" w:type="dxa"/>' + borders +
-            '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="80" w:type="dxa"/>' +
-            '<w:bottom w:w="60" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr>' +
-            rows + '</w:tbl>';
+    body += wtable(rows);
     body += wp('');
   });
 
   body += wp(CREDIT, { size: 18 });
-
-  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
-    '<w:body>' + body +
-    '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>' +
-    '<w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720"/><w:bidi/></w:sectPr>' +
-    '</w:body></w:document>';
+  return docShell(body, true);
 }
 
 /* ZIP מינימלי, ללא דחיסה */
@@ -937,7 +1220,14 @@ function zip(files) {
   return out;
 }
 
-function downloadDocx() {
+function downloadPlanDocx() {
+  downloadDocx(planDocXml, programLabel().label.replace(/"/g, '') + ' — ' + fileStem(), downloadPlanDocx);
+}
+function downloadProfileDocx() {
+  downloadDocx(profileDocXml, 'פרופיל תלמיד — ' + fileStem(), downloadProfileDocx);
+}
+
+function downloadDocx(builder, stem, retry) {
   try {
     var files = [
       { name: '[Content_Types].xml', data:
@@ -952,17 +1242,17 @@ function downloadDocx() {
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
         '</Relationships>' },
-      { name: 'word/document.xml', data: docXml() }
+      { name: 'word/document.xml', data: builder() }
     ];
     var blob = new Blob([zip(files)], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = programLabel().label.replace(/"/g, '') + ' — ' + (S.grade ? 'כיתה ' + S.grade : 'תוכנית') + '.docx';
+    a.download = stem.replace(/[\\/:*?"<>|]/g, '') + '.docx';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
     toast('הקובץ ירד');
   } catch (e) {
-    showError('לא הצלחנו ליצור את קובץ ה-Word.', downloadDocx);
+    showError('לא הצלחנו ליצור את קובץ ה-Word.', retry);
   }
 }
 
