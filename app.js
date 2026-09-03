@@ -326,13 +326,13 @@ function renderHome() {
   w.appendChild(el('p', 'modehint',
     'נתוני בסיס, ואז רמזור תפקודי מלא — תחום אחר תחום. בסוף בוחרים במה להתמקד, והתוכנית נבנית.'));
   var draft = loadDraft();
-  if (draft && (draft.grade || (draft.domains && draft.domains.length))) {
+  if (draft && (draft.grade || (draft.focus && draft.focus.length))) {
     var b2 = el('button', 'btn ghost', 'המשך טיוטה שמורה');
     b2.onclick = function () { S = draft; screen = S.tables ? 'result' : 'q'; render(); };
     w.appendChild(b2);
   }
-  w.appendChild(el('p', 'privacy',
-    '🔒 אין באפליקציה שדה לפרטי תלמיד/ה. בקובץ שיורד יש משבצות ריקות למילוי במחשב שלך.'));
+  /* קרדיט במסך הפתיחה בלבד — לא בתוצר ולא בקבצים שיורדים */
+  w.appendChild(el('p', 'credit', 'ממעבדת הניסויים של מרי גרבי, פותח עם שרון רז מתי״א שלהבת'));
   app.appendChild(w);
 }
 
