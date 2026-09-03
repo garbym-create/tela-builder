@@ -128,7 +128,7 @@ function buildSteps() {
   }
 
   steps.push({ key: 'radar', kind: 'radar', q: 'רמזור פרופיל התלמיד/ה',
-               sub: 'עוברים תחום אחר תחום ומסמנים את מה שחורג. בסוף כל תחום אפשר לסמן בלחיצה אחת שכל השאר עצמאי.' });
+               sub: 'עוברים תחום אחר תחום ומסמנים את מה שחורג. בסוף כל תחום אפשר לסמן בלחיצה אחת שכל השאר עצמאי, או להעמיק ולראות את מלוא המיומנויות.' });
 
   steps.push({ key: 'domains', kind: 'cards', q: 'באילו תחומים חשוב לך להתמקד השנה?',
                sub: 'עד שלושה תחומים. התוכנית תיבנה סביבם, על בסיס מה שעלה ברמזור.', max: 3 });
@@ -301,7 +301,7 @@ function renderHome() {
   w.appendChild(el('h1', null, 'בונה תל״א – תח״י'));
   w.appendChild(el('p', 'lead', 'מיפוי קצר, ובסוף תוכנית מוכנה להגשה.'));
   var b = el('button', 'btn primary big', 'התחלה');
-  b.onclick = function () { S = blankState(); radarOpen = null; save(); screen = 'q'; render(); };
+  b.onclick = function () { S = blankState(); radarOpen = null; radarDeep = {}; lastBulk = null; save(); screen = 'q'; render(); };
   w.appendChild(b);
   w.appendChild(el('p', 'modehint',
     'נתוני בסיס, ואז רמזור תפקודי מלא — תחום אחר תחום. בסוף בוחרים במה להתמקד, והתוכנית נבנית.'));
@@ -504,7 +504,18 @@ var RADAR_LEVELS = (BANK.trafficLightLevels || []).map(function (l) {
 });
 
 var radarOpen = null;   // מזהה העמודה הפתוחה
+var radarDeep = {};     // עמודות שנפתחו למלוא המיומנויות, מעבר לליבה
 var lastBulk = null;    // הסימון הקבוצתי האחרון, לצורך ביטול
+
+/* המיומנויות שמוצגות בעמודה: ליבה בלבד, או הכול אם המורה ביקשה להעמיק */
+function radarVisible(col) {
+  var deep = !!radarDeep[col.id], out = [];
+  col.skills.forEach(function (sk, i) {
+    if (sk.section) { if (deep) out.push({ sk: sk, i: i }); return; }
+    if (deep || sk.core) out.push({ sk: sk, i: i });
+  });
+  return out;
+}
 
 function radarPathOf(skill, colId, idx) {
   if (skill.st) {
@@ -518,22 +529,28 @@ function radarSkills(col) {
   return col.skills.filter(function (sk) { return !sk.section; });
 }
 
+/* ספירה על המיומנויות שמוצגות כרגע בעמודה */
 function radarMarkedCount(col) {
   var n = 0;
-  col.skills.forEach(function (sk, i) {
-    if (sk.section) return;
-    var p = radarPathOf(sk, col.id, i);
+  radarVisible(col).forEach(function (e) {
+    if (e.sk.section) return;
+    var p = radarPathOf(e.sk, col.id, e.i);
     if (p && get(p)) n++;
   });
   return n;
 }
 
 function renderRadar(card, st) {
-  var total = 0, marked = 0;
+  var coreTotal = 0, coreMarked = 0, extraMarked = 0;
   BANK.trafficLight.forEach(function (col) {
-    total += radarSkills(col).length;
-    marked += radarMarkedCount(col);
+    col.skills.forEach(function (sk, i) {
+      if (sk.section) return;
+      var p = radarPathOf(sk, col.id, i), on = p && get(p);
+      if (sk.core) { coreTotal++; if (on) coreMarked++; }
+      else if (on) extraMarked++;
+    });
   });
+  var marked = coreMarked + extraMarked;
 
   var key = el('div', 'tlkey');
   RADAR_LEVELS.forEach(function (lv) {
@@ -547,8 +564,9 @@ function renderRadar(card, st) {
   });
   card.appendChild(key);
 
-  var summary = el('p', 'counter', 'סומנו ' + marked + ' מיומנויות מתוך ' + total);
-  card.appendChild(summary);
+  card.appendChild(el('p', 'counter',
+    'סומנו ' + coreMarked + ' מתוך ' + coreTotal + ' מיומנויות הליבה' +
+    (extraMarked ? ' · ועוד ' + extraMarked + ' מיומנויות עומק' : '')));
 
   if (radarOpen === null) radarOpen = BANK.trafficLight[0].id;
 
@@ -558,15 +576,16 @@ function renderRadar(card, st) {
     var head = el('button', 'tlhead' + (open ? ' on' : ''));
     head.setAttribute('aria-expanded', open ? 'true' : 'false');
     head.appendChild(el('span', 'tlname', col.label));
-    var cnt = radarMarkedCount(col);
-    head.appendChild(el('span', 'tlcount', cnt + '/' + radarSkills(col).length));
+    var shown = radarVisible(col).filter(function (e) { return !e.sk.section; }).length;
+    head.appendChild(el('span', 'tlcount', radarMarkedCount(col) + '/' + shown));
     head.appendChild(el('span', 'tlarrow', open ? '⌃' : '⌄'));
     head.onclick = function () { radarOpen = open ? null : col.id; soft(); };
     box.appendChild(head);
 
     if (open) {
       var rows = el('div', 'tlrows');
-      col.skills.forEach(function (sk, i) {
+      radarVisible(col).forEach(function (entry) {
+        var sk = entry.sk, i = entry.i;
         if (sk.section) { rows.appendChild(el('div', 'tlsection', sk.label)); return; }
         var path = radarPathOf(sk, col.id, i);
         var cur = path ? get(path) : null;
@@ -592,11 +611,11 @@ function renderRadar(card, st) {
         rows.appendChild(row);
       });
 
-      /* "כל השאר עצמאי" — המורה מסמנת רק את מה שחורג, ומביאה את השאר בלחיצה אחת */
+      /* "כל השאר עצמאי" — חל רק על מה שמוצג, כדי לא לסמן בשם המורה מיומנויות שלא ראתה */
       var pending = [];
-      col.skills.forEach(function (sk, i) {
-        if (sk.section) return;
-        var p = radarPathOf(sk, col.id, i);
+      radarVisible(col).forEach(function (e) {
+        if (e.sk.section) return;
+        var p = radarPathOf(e.sk, col.id, e.i);
         if (p && !get(p)) pending.push(p);
       });
       var bulk = el('div', 'tlbulk');
@@ -618,6 +637,19 @@ function renderRadar(card, st) {
           soft();
         };
         bulk.appendChild(ub);
+      }
+      var hidden = radarSkills(col).length - radarVisible(col)
+        .filter(function (e) { return !e.sk.section; }).length;
+      if (hidden > 0 || radarDeep[col.id]) {
+        var db = el('button', 'tldeep', radarDeep[col.id]
+          ? '↑ לחזור למיומנויות הליבה'
+          : '↓ להעמיק בתחום הזה (עוד ' + hidden + ' מיומנויות)');
+        db.onclick = function () {
+          radarDeep[col.id] = !radarDeep[col.id];
+          lastBulk = null;
+          soft();
+        };
+        bulk.appendChild(db);
       }
       if (bulk.childNodes.length) rows.appendChild(bulk);
 
