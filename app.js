@@ -277,13 +277,22 @@ function el(tag, cls, txt) {
   return e;
 }
 
+/* ציור מחדש "רך": אותו מסך, בלי אנימציית כניסה ובלי לקפוץ לראש העמוד.
+   כל סימון או בחירה שמשאירים את המורה באותה שאלה עוברים דרך soft(). */
+var softRender = false;
+function soft() { softRender = true; render(); }
+
 function render() {
+  var y = window.scrollY, wasSoft = softRender;
   app.innerHTML = '';
-  if (screen === 'home') return renderHome();
-  if (screen === 'summary') return renderSummary();
-  if (screen === 'loading') return renderLoading();
-  if (screen === 'result') return renderResult();
-  renderQuestion();
+  if (screen === 'home') renderHome();
+  else if (screen === 'summary') renderSummary();
+  else if (screen === 'loading') renderLoading();
+  else if (screen === 'result') renderResult();
+  else renderQuestion();
+  if (wasSoft) window.scrollTo(0, y);
+  else window.scrollTo(0, 0);
+  softRender = false;
 }
 
 function renderHome() {
@@ -334,7 +343,7 @@ function renderQuestion() {
   head.appendChild(el('span', 'count', 'שאלה ' + (S.step + 1) + ' מתוך ' + steps.length));
   app.appendChild(head);
 
-  var card = el('div', 'card enter');
+  var card = el('div', 'card' + (softRender ? '' : ' enter'));
   if (st.tag) card.appendChild(el('div', 'tag', st.tag));
   card.appendChild(el('h2', null, st.q));
   if (st.sub) card.appendChild(el('p', 'sub', st.sub));
@@ -346,8 +355,10 @@ function renderQuestion() {
   else if (st.kind === 'radar') renderRadar(card, st);
 
   app.appendChild(card);
-  var f = card.querySelector('button, textarea');
-  if (f) f.focus({ preventScroll: true });
+  if (!softRender) {
+    var f = card.querySelector('button, textarea');
+    if (f) f.focus({ preventScroll: true });
+  }
 }
 
 function nextBtn(card, label, fn, disabled) {
@@ -402,9 +413,9 @@ function renderSingle(card, st) {
       }
       set(st.key, o.v);
       var noteOpen = noteEl && !noteEl.hidden && noteEl.value;
-      if (st.noteIf && o.v === st.noteIf) { render(); return; }
-      if ((st.openNoteFor || []).indexOf(o.v) > -1) { forceNote = st.key; render(); return; }
-      if (noteOpen) { render(); return; }
+      if (st.noteIf && o.v === st.noteIf) { soft(); return; }
+      if ((st.openNoteFor || []).indexOf(o.v) > -1) { forceNote = st.key; soft(); return; }
+      if (noteOpen) { soft(); return; }
       goto(S.step + 1);
     };
     list.appendChild(b);
@@ -434,7 +445,7 @@ function renderMulti(card, st) {
       var arr = (get(st.key) || []).slice();
       var i = arr.indexOf(o.v);
       if (i > -1) arr.splice(i, 1); else arr.push(o.v);
-      set(st.key, arr); render();
+      set(st.key, arr); soft();
     };
     list.appendChild(b);
   });
@@ -465,7 +476,7 @@ function renderCards(card, st) {
       var i = arr.indexOf(c.id);
       if (i > -1) arr.splice(i, 1);
       else { if (arr.length >= st.max) return; arr.push(c.id); }
-      S.domains = arr; save(); render();
+      S.domains = arr; save(); soft();
     };
     list.appendChild(b);
   });
@@ -549,7 +560,7 @@ function renderRadar(card, st) {
     var cnt = radarMarkedCount(col);
     head.appendChild(el('span', 'tlcount', cnt + '/' + radarSkills(col).length));
     head.appendChild(el('span', 'tlarrow', open ? '⌃' : '⌄'));
-    head.onclick = function () { radarOpen = open ? null : col.id; render(); };
+    head.onclick = function () { radarOpen = open ? null : col.id; soft(); };
     box.appendChild(head);
 
     if (open) {
@@ -572,7 +583,7 @@ function renderRadar(card, st) {
           b.onclick = function () {
             if (!path) return;
             set(path, cur === lv.v ? '' : lv.v);
-            render();
+            soft();
           };
           group.appendChild(b);
         });
@@ -756,7 +767,7 @@ function renderResult() {
   }
 
   S.tables.forEach(function (tb, ti) {
-    var box = el('div', 'tbox enter');
+    var box = el('div', 'tbox' + (softRender ? '' : ' enter'));
     var th = el('div', 'thead');
     var title = el('h3', null, 'מטרה ' + (ti + 1) + ': ' + tb.title);
     title.contentEditable = 'true';
@@ -765,7 +776,7 @@ function renderResult() {
     th.appendChild(el('span', 'dtag', DOM_LABEL[tb.domain]));
     var del = el('button', 'xbtn', '✕');
     del.setAttribute('aria-label', 'הסרת המטרה');
-    del.onclick = function () { S.tables.splice(ti, 1); save(); render(); };
+    del.onclick = function () { S.tables.splice(ti, 1); save(); soft(); };
     th.appendChild(del);
     box.appendChild(th);
 
@@ -829,7 +840,7 @@ function addGoalDialog() {
       var b = el('button', 'opt');
       b.appendChild(el('span', 'lbl', g.title));
       if (g.gradeBands.indexOf(band) < 0) b.appendChild(el('span', 'desc', 'מותאם בעיקר לשכבות ' + g.gradeBands.join(', ')));
-      b.onclick = function () { S.tables.push(buildTable(g)); save(); document.body.removeChild(back); render(); };
+      b.onclick = function () { S.tables.push(buildTable(g)); save(); document.body.removeChild(back); soft(); };
       m.appendChild(b);
     });
   });
