@@ -128,7 +128,7 @@ function buildSteps() {
   }
 
   steps.push({ key: 'radar', kind: 'radar', q: 'רמזור פרופיל התלמיד/ה',
-               sub: 'עוברים תחום אחר תחום ומסמנים לכל מיומנות את רמת התפקוד והעצמאות היום. אפשר לדלג על מה שלא רלוונטי.' });
+               sub: 'עוברים תחום אחר תחום ומסמנים את מה שחורג. בסוף כל תחום אפשר לסמן בלחיצה אחת שכל השאר עצמאי.' });
 
   steps.push({ key: 'domains', kind: 'cards', q: 'באילו תחומים חשוב לך להתמקד השנה?',
                sub: 'עד שלושה תחומים. התוכנית תיבנה סביבם, על בסיס מה שעלה ברמזור.', max: 3 });
@@ -504,6 +504,7 @@ var RADAR_LEVELS = (BANK.trafficLightLevels || []).map(function (l) {
 });
 
 var radarOpen = null;   // מזהה העמודה הפתוחה
+var lastBulk = null;    // הסימון הקבוצתי האחרון, לצורך ביטול
 
 function radarPathOf(skill, colId, idx) {
   if (skill.st) {
@@ -590,6 +591,36 @@ function renderRadar(card, st) {
         row.appendChild(group);
         rows.appendChild(row);
       });
+
+      /* "כל השאר עצמאי" — המורה מסמנת רק את מה שחורג, ומביאה את השאר בלחיצה אחת */
+      var pending = [];
+      col.skills.forEach(function (sk, i) {
+        if (sk.section) return;
+        var p = radarPathOf(sk, col.id, i);
+        if (p && !get(p)) pending.push(p);
+      });
+      var bulk = el('div', 'tlbulk');
+      if (pending.length) {
+        var bb = el('button', 'tlbulkbtn',
+          '🟢 כל השאר בתחום הזה עצמאי (' + pending.length + ')');
+        bb.onclick = function () {
+          pending.forEach(function (p) { set(p, 'strength'); });
+          lastBulk = { col: col.id, paths: pending };
+          soft();
+        };
+        bulk.appendChild(bb);
+      }
+      if (lastBulk && lastBulk.col === col.id) {
+        var ub = el('button', 'tlundo', 'ביטול הסימון האחרון (' + lastBulk.paths.length + ')');
+        ub.onclick = function () {
+          lastBulk.paths.forEach(function (p) { set(p, ''); });
+          lastBulk = null;
+          soft();
+        };
+        bulk.appendChild(ub);
+      }
+      if (bulk.childNodes.length) rows.appendChild(bulk);
+
       box.appendChild(rows);
     }
     card.appendChild(box);
