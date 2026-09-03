@@ -584,7 +584,7 @@ function renderRadar(card, st) {
     card.appendChild(box);
   });
 
-  nextBtn(card, marked ? 'סיום המיפוי' : 'דילוג', function () { goto(S.step + 1); });
+  nextBtn(card, marked ? 'סיום הרמזור' : 'דילוג', function () { goto(S.step + 1); });
 }
 
 /* דירוג התחומים לפי חומרת הקשיים שסומנו ברמזור */
