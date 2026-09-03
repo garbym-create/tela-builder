@@ -44,23 +44,21 @@ var SUPPORTS = [
   'מרפאה בעיסוק','פיזיותרפיה','טיפול באומנויות','אחר'
 ];
 
-var DOMAIN_CARDS = [
-  { id: 'cognitive',  icon: '🧠', label: 'קוגניטיבי',            sub: 'הסקה · מיון והכללה · תפקודים ניהוליים' },
-  { id: 'academic',   icon: '📘', label: 'לימודי',              sub: 'קריאה · כתיבה · מתמטיקה' },
-  { id: 'learner',    icon: '🎒', label: 'תלמידאות ועצמאות',    sub: 'התארגנות · קשב · עבודה עצמאית' },
-  { id: 'social_emo', icon: '🤝', label: 'חברתי ורגשי',          sub: 'קשרים · ויסות · כללים' },
-  { id: 'language',   icon: '🗣', label: 'שפתי-תקשורתי',        sub: 'הבעה בעל פה · ניהול שיח' },
-  { id: 'motor_adl',  icon: '✋', label: 'מוטורי ו-ADL',         sub: 'מוטוריקה · ניידות · תפקוד יומיומי' }
-];
-
+/* אייקון ודוגמה לכל עמודה ברמזור. מסך ההתמקדות מדבר באותן עמודות
+   שהמורה בדיוק סימנה, ולא בשמות התחומים הפנימיים של הבנק. */
+var COL_ICON = {
+  tl_social: '🤝', tl_learning: '📘', tl_organization: '🎒', tl_regulation: '💛',
+  tl_self: '🪞', tl_communication: '🗣', tl_motor: '✋'
+};
 
 var FOCUS_PLACEHOLDER = {
-  cognitive:  'לדוגמה: רוצה שהיא תלמד לעצור ולתכנן לפני שהיא מתחילה, כי היא קופצת ישר לפתרון.',
-  academic:   'לדוגמה: הדגש השנה על תשובה כתובה מלאה — הוא יודע את התוכן אבל התשובות שלו מילה אחת.',
-  learner:    'לדוגמה: העצמאות בשיעור. רוצה שיתחיל לבד בלי שאשב לידו בהתחלה של כל מטלה.',
-  social_emo: 'לדוגמה: ההפסקות. חשוב לי שתהיה לו קבוצה קבועה ולא שיסתובב לבד.',
-  language:   'לדוגמה: שיצליח לספר דבר שקרה לו בצורה שהמאזין מבין, עם התחלה ורצף.',
-  motor_adl:  'לדוגמה: העצמאות בהתארגנות — שיגיע ויתארגן לבד בלי שהסייעת תעשה במקומו.'
+  tl_social:        'לדוגמה: ההפסקות. חשוב לי שתהיה לו קבוצה קבועה ולא שיסתובב לבד.',
+  tl_learning:      'לדוגמה: הדגש השנה על תשובה כתובה מלאה — הוא יודע את התוכן אבל התשובות שלו מילה אחת.',
+  tl_organization:  'לדוגמה: שיתחיל לבד בלי שאשב לידו בהתחלה של כל מטלה, ויעמוד בזמן שהוקצב.',
+  tl_regulation:    'לדוגמה: המעברים. כל שינוי בלוח הזמנים מוציא אותו משיווי משקל לחצי שיעור.',
+  tl_self:          'לדוגמה: שיבקש עזרה בעצמו במקום לחכות שאשים לב, וישתמש בהתאמות שיש לו.',
+  tl_communication: 'לדוגמה: שיצליח לספר דבר שקרה לו בצורה שהמאזין מבין, עם התחלה ורצף.',
+  tl_motor:         'לדוגמה: העצמאות בהתארגנות — שיגיע ויתארגן לבד בלי שהסייעת תעשה במקומו.'
 };
 
 
@@ -82,7 +80,7 @@ var S = null;
 function blankState() {
   return { grade: '', disability: [], disability_note: '', setting: '', prior: '', prior_note: '',
            hasSupport: '', supports: [], supports_note: '',
-           domains: [], d: {}, tl: {}, worked: [], worked_note: '',
+           focus: [], focusText: {}, d: {}, tl: {}, worked: [], worked_note: '',
            profile: null, tables: null, step: 0 };
 }
 
@@ -130,14 +128,16 @@ function buildSteps() {
   steps.push({ key: 'radar', kind: 'radar', q: 'רמזור פרופיל התלמיד/ה',
                sub: 'עוברים תחום אחר תחום ומסמנים את מה שחורג. בסוף כל תחום אפשר לסמן בלחיצה אחת שכל השאר עצמאי, או להעמיק ולראות את מלוא המיומנויות.' });
 
-  steps.push({ key: 'domains', kind: 'cards', q: 'באילו תחומים חשוב לך להתמקד השנה?',
-               sub: 'עד שלושה תחומים. התוכנית תיבנה סביבם, על בסיס מה שעלה ברמזור.', max: 3 });
+  steps.push({ key: 'focus', kind: 'cards', q: 'באילו תחומים חשוב לך להתמקד השנה?',
+               sub: 'עד שלושה תחומים, מאותם תחומים שסימנת ברמזור. התוכנית תיבנה סביבם.', max: 3 });
 
-  (S.domains || []).forEach(function (domId) {
-    steps.push({ key: 'd.' + domId + '.focus', kind: 'text', tag: DOM_LABEL[domId],
-                 q: 'מה במיוחד חשוב לך להתמקד בו בתחום ה' + DOM_LABEL[domId] + '?',
+  (S.focus || []).forEach(function (colId) {
+    var col = colById(colId);
+    if (!col) return;
+    steps.push({ key: 'focusText.' + colId, kind: 'text', tag: col.label,
+                 q: 'מה במיוחד חשוב לך להתמקד בו?',
                  sub: 'אפשר לפרט, ואפשר לדלג — הניתוח יסתמך על מה שסימנת ברמזור.',
-                 placeholder: FOCUS_PLACEHOLDER[domId] || '' });
+                 placeholder: FOCUS_PLACEHOLDER[colId] || '' });
   });
 
   steps.push({ key: 'worked', kind: 'multi', q: 'מה כבר ניסיתם והצליח, ולו חלקית?',
@@ -151,20 +151,37 @@ function buildSteps() {
 
 function ratingsOf(domId) { return get('d.' + domId + '.r') || {}; }
 
-/* מטרה נבחרת רק אם יש קושי מתועד שמפעיל אותה. אין מטרה בלי קושי. */
-function pickGoal(domId, exclude) {
-  var r = ratingsOf(domId), band = bandOf(S.grade);
+function colById(id) {
+  var out = null;
+  BANK.trafficLight.forEach(function (c) { if (c.id === id) out = c; });
+  return out;
+}
+
+/* המיומנויות שסומנו בעמודה כ"בתהליך למידה" או "ראשית הדרך" */
+function markedInColumn(col) {
+  var out = [];
+  if (!col) return out;
+  col.skills.forEach(function (sk, i) {
+    if (sk.section || !sk.st) return;
+    var p = radarPathOf(sk, col.id, i), v = p ? get(p) : null;
+    if (v === 'partial' || v === 'weakness') out.push({ id: sk.st, v: v });
+  });
+  return out;
+}
+
+/* מטרה נבחרת רק אם יש יעד מתועד שמפעיל אותה, ולא משנה לאיזה תחום פנימי
+   המיומנות שייכת — הקובע הוא מה שסומן בעמודה שהמורה בחרה. */
+function pickGoalForColumn(col, exclude) {
+  var marks = markedInColumn(col);
+  if (!marks.length) return null;
+  var band = bandOf(S.grade), w = {};
+  marks.forEach(function (m) { w[m.id] = (m.v === 'weakness' ? 3 : 2); });
   var scored = BANK.goals.filter(function (g) {
-    return g.domain === domId && (exclude || []).indexOf(g.id) < 0;
+    return (exclude || []).indexOf(g.id) < 0;
   }).map(function (g) {
-    var trig = 0, bonus = 0;
-    g.triggeredBy.forEach(function (id) {
-      var v = r[id];
-      if (v === 'weakness') trig += 3;
-      else if (v === 'partial') trig += 2;
-    });
-    bonus += g.gradeBands.indexOf(band) > -1 ? 1 : -1;
-    return { g: g, trig: trig, sc: trig + bonus };
+    var trig = 0;
+    g.triggeredBy.forEach(function (id) { if (w[id]) trig += w[id]; });
+    return { g: g, trig: trig, sc: trig + (g.gradeBands.indexOf(band) > -1 ? 1 : -1) };
   }).filter(function (x) { return x.trig > 0; })
     .sort(function (a, b) { return b.sc - a.sc; });
   return scored.length ? scored[0].g : null;
@@ -195,7 +212,7 @@ function criteriaFor(goal, when) {
   return parts.join(' · ');
 }
 
-function buildTable(goal) {
+function buildTable(goal, tag) {
   var objs = goal.objectives.slice();
   var half = Math.ceil(objs.length / 2);
   var midObjs = objs.slice(0, half);
@@ -206,6 +223,7 @@ function buildTable(goal) {
     goalId: goal.id,
     title: goal.title,
     domain: goal.domain,
+    tag: tag || DOM_LABEL[goal.domain],
     rows: [
       /* הערכה מעצבת ומסכמת נשארות ריקות — הן נכתבות בהמשך השנה, לא בשלב בניית התוכנית */
       { period: PERIOD_MID, objectives: midObjs, methods: methods, criteria: criteriaFor(goal, 'mid'),
@@ -225,8 +243,10 @@ function buildProfile() {
       if (r[id] === 'strength') strengths.push(st.strength);
       else needs.push(st[r[id]]);
     });
-    var fx = get('d.' + domId + '.focus');
-    if (fx) needs.push('מוקד ההתמקדות (' + DOM_LABEL[domId] + '): ' + fx);
+  });
+  (S.focus || []).forEach(function (colId) {
+    var fx = get('focusText.' + colId), col = colById(colId);
+    if (fx && col) needs.push('מוקד ההתמקדות (' + col.label + '): ' + fx);
   });
   /* מיומנויות מהרמזור שאין להן היגד בבנק — נכנסות לפרופיל בלבד */
   (BANK.trafficLight || []).forEach(function (col) {
@@ -455,28 +475,31 @@ function renderMulti(card, st) {
 }
 
 function renderCards(card, st) {
-  var cur = S.domains || [];
+  var cur = S.focus || [];
   var list = el('div', 'domaincards');
-  DOMAIN_CARDS.forEach(function (c) {
-    var on = cur.indexOf(c.id) > -1;
+  BANK.trafficLight.forEach(function (col) {
+    var marks = markedInColumn(col);
+    var on = cur.indexOf(col.id) > -1;
     var full = cur.length >= st.max && !on;
     var b = el('button', 'dcard' + (on ? ' on' : '') + (full ? ' dim' : ''));
-    b.appendChild(el('span', 'ico', c.icon));
+    b.appendChild(el('span', 'ico', COL_ICON[col.id] || '•'));
     var t = el('span', 'txt');
-    t.appendChild(el('span', 'lbl', c.label));
-    var r = ratingsOf(c.id), n = 0;
-    Object.keys(r).forEach(function (k) { if (r[k] === 'partial' || r[k] === 'weakness') n++; });
-    t.appendChild(el('span', 'desc', n
-      ? n + ' מיומנויות סומנו כבתהליך למידה או כראשית הדרך'
+    t.appendChild(el('span', 'lbl', col.label));
+    var red = marks.filter(function (m) { return m.v === 'weakness'; }).length;
+    var yellow = marks.length - red;
+    var parts = [];
+    if (red) parts.push('🔴 ' + red);
+    if (yellow) parts.push('🟡 ' + yellow);
+    t.appendChild(el('span', 'desc', parts.length
+      ? parts.join(' · ') + ' — יעדים להתערבות'
       : 'לא סומנו יעדים להתערבות בתחום זה'));
     b.appendChild(t);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
     b.onclick = function () {
-      var arr = (S.domains || []).slice();
-      var i = arr.indexOf(c.id);
+      var arr = (S.focus || []).slice(), i = arr.indexOf(col.id);
       if (i > -1) arr.splice(i, 1);
-      else { if (arr.length >= st.max) return; arr.push(c.id); }
-      S.domains = arr; save(); soft();
+      else { if (arr.length >= st.max) return; arr.push(col.id); }
+      S.focus = arr; save(); soft();
     };
     list.appendChild(b);
   });
@@ -661,19 +684,6 @@ function renderRadar(card, st) {
   nextBtn(card, marked ? 'סיום הרמזור' : 'דילוג', function () { goto(S.step + 1); });
 }
 
-/* דירוג התחומים לפי חומרת הקשיים שסומנו ברמזור */
-function radarDomains() {
-  var score = {};
-  Object.keys(S.d || {}).forEach(function (dom) {
-    var r = (S.d[dom] || {}).r || {}, sc = 0;
-    Object.keys(r).forEach(function (id) {
-      if (r[id] === 'weakness') sc += 3;
-      else if (r[id] === 'partial') sc += 2;
-    });
-    if (sc > 0) score[dom] = sc;
-  });
-  return Object.keys(score).sort(function (a, b) { return score[b] - score[a]; });
-}
 
 /* ---------- מסך סיכום ---------- */
 
@@ -757,21 +767,24 @@ var LOAD_MSGS = ['קורא את הפרופיל…','בוחר מטרות שמתא
 
 function produce() {
   screen = 'loading'; render();
-  var chosen = S.domains || [];
-  S.deferred = radarDomains().filter(function (d) { return chosen.indexOf(d) < 0; })
-                             .map(function (d) { return DOM_LABEL[d]; });
+  var chosen = S.focus || [];
+  S.deferred = [];
+  BANK.trafficLight.forEach(function (col) {
+    if (chosen.indexOf(col.id) < 0 && markedInColumn(col).length) S.deferred.push(col.label);
+  });
   var used = [], tables = [], skipped = [];
-  (S.domains || []).forEach(function (domId) {
-    var g = pickGoal(domId, used);
-    if (g) { used.push(g.id); tables.push(buildTable(g)); }
-    else skipped.push(DOM_LABEL[domId]);
+  chosen.forEach(function (colId) {
+    var col = colById(colId);
+    var g = pickGoalForColumn(col, used);
+    if (g) { used.push(g.id); tables.push(buildTable(g, col.label)); }
+    else if (col) skipped.push(col.label);
   });
   setTimeout(function () {
     S.skipped = skipped;
     if (!tables.length) {
       screen = 'summary'; render();
-      showError('לא סומן קושי שמפעיל מטרה מהמאגר, ולכן לא נבנתה תוכנית. כדאי לחזור למסכי העומק ולסמן "חלקי" או "קושי", או להוסיף מטרה ידנית.',
-                function () { screen = 'q'; goto(4); });
+      showError('בתחומים שנבחרו לא סומן יעד להתערבות, ולכן לא נבנתה תוכנית. כדאי לחזור לרמזור ולסמן 🟡 או 🔴, או להוסיף מטרה ידנית מהמאגר.',
+                function () { screen = 'q'; goto(0); });
       return;
     }
     S.tables = tables; save();
@@ -836,7 +849,7 @@ function renderResult() {
     title.contentEditable = 'true';
     title.oninput = function () { tb.title = title.textContent.replace(/^מטרה \d+: /, ''); save(); };
     th.appendChild(title);
-    th.appendChild(el('span', 'dtag', DOM_LABEL[tb.domain]));
+    th.appendChild(el('span', 'dtag', tb.tag || DOM_LABEL[tb.domain]));
     var del = el('button', 'xbtn', '✕');
     del.setAttribute('aria-label', 'הסרת המטרה');
     del.onclick = function () { S.tables.splice(ti, 1); save(); soft(); };
