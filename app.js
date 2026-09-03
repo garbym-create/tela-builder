@@ -6,8 +6,6 @@
 var BANK = JSON.parse(document.getElementById('bank').textContent);
 var ST = {};   // statements by id
 BANK.statements.forEach(function (s) { ST[s.id] = s; });
-var BY_SUB = {};
-BANK.statements.forEach(function (s) { (BY_SUB[s.subdomain] = BY_SUB[s.subdomain] || []).push(s); });
 var DOM_LABEL = {};
 var SUB_DOM = {};   // subdomain -> domain id
 BANK.domains.forEach(function (d) {
@@ -29,12 +27,21 @@ function bandOf(grade) {
   return '7-9';
 }
 
-var DISABILITIES = ['לקות למידה','הפרעת קשב','ASD','לקות שפתית','עיכוב התפתחותי','מוגבלות שכלית','חושי או פיזי','אחר'];
+var DISABILITIES = [
+  'לקות למידה','משכל גבולי','הפרעות התנהגותיות רגשיות','אוטיזם ASD',
+  'הפרעות נפשיות','הפרעת קשב וריכוז ADHD','עיכוב התפתחותי','עיכוב התפתחותי שפתי',
+  'מוגבלות שכלית','מוגבלות פיזית','לקות שמיעה','לקות ראייה','אחר'
+];
 
 var SETTINGS = [
-  { v: 'regular_integrated', label: 'כיתה רגילה עם שילוב' },
-  { v: 'special_class',      label: 'כיתת חינוך מיוחד' },
-  { v: 'special_school',     label: 'בית ספר לחינוך מיוחד' }
+  { v: 'regular',        label: 'כיתה רגילה' },
+  { v: 'special_class',  label: 'כיתת חנ״מ בבי״ס רגיל' },
+  { v: 'special_school', label: 'בי״ס חנ״מ' }
+];
+
+var SUPPORTS = [
+  'הוראה מותאמת','תומכת הוראה (סיוע)','קלינאית תקשורת',
+  'מרפאה בעיסוק','פיזיותרפיה','טיפול באומנויות','אחר'
 ];
 
 var DOMAIN_CARDS = [
@@ -46,53 +53,16 @@ var DOMAIN_CARDS = [
   { id: 'motor_adl',  icon: '✋', label: 'מוטורי ו-ADL',         sub: 'מוטוריקה · ניידות · תפקוד יומיומי' }
 ];
 
-/* תחומי משנה: כל אחד מוביל לתת-תחום אחד או לשאלת הסתעפות */
-var SUBAREAS = {
-  cognitive: [
-    { v: 'reasoning', label: 'חשיבה, הסקה והכללה', sd: 'cognitive_reasoning' },
-    { v: 'executive', label: 'תפקודים ניהוליים ובקרה עצמית', sd: 'cognitive_executive' }
-  ],
-  language: [
-    { v: 'oral',      label: 'הבעה בעל פה ואוצר מילים', sd: 'language_oral' },
-    { v: 'discourse', label: 'ניהול שיח ותקשורת', sd: 'discourse' }
-  ],
-  academic: [
-    { v: 'reading', label: 'קריאה', branch: 'הקושי בפענוח ובשטף, או בהבנת הנקרא?',
-      opts: [{ v: 'reading_fluency', label: 'פענוח ושטף' }, { v: 'reading_comprehension', label: 'הבנת הנקרא' }] },
-    { v: 'writing', label: 'כתיבה', branch: 'הקושי בכתב היד ובארגון הדף, או בהבעה בכתב?',
-      opts: [{ v: 'writing_motor', label: 'כתב יד וארגון הדף' }, { v: 'writing_expression', label: 'הבעה בכתב וכתיב' }] },
-    { v: 'math', label: 'מתמטיקה', branch: 'הקושי במושג המספר, או בפעולות ובבעיות?',
-      opts: [{ v: 'math_numbers', label: 'מושג המספר ומבנה עשרוני' }, { v: 'math_operations', label: 'פעולות ובעיות מילוליות' }, { v: 'math_geometry', label: 'צורות ומדידות' }] }
-  ],
-  learner: [
-    { v: 'organization', label: 'התארגנות וציוד', sd: 'organization' },
-    { v: 'attention',    label: 'קשב וריכוז',     sd: 'attention' },
-    { v: 'independence', label: 'עבודה עצמאית ומוטיבציה', branch: 'הקושי בעצמאות בעבודה, או במוטיבציה וברצון?',
-      opts: [{ v: 'independence', label: 'עצמאות והתמדה' }, { v: 'motivation', label: 'מוטיבציה ורצון' }] },
-    { v: 'instructions', label: 'הבנת הוראות', sd: 'comprehension_instructions' }
-  ],
-  social_emo: [
-    { v: 'peers', label: 'קשרים עם בני הגיל', branch: 'הקושי ביצירת הקשר עצמו, או בהבנת מצבים ובפתרון קונפליקטים?',
-      opts: [{ v: 'peer_relations', label: 'יצירת קשר ויוזמה' }, { v: 'social_cognition', label: 'הבנת מצבים ופתרון קונפליקטים' }] },
-    { v: 'emotional', label: 'ויסות רגשי ותסכול', sd: 'emotional_regulation' },
-    { v: 'rules',     label: 'כללים, מעברים ומרחב אישי', sd: 'rules_authority' },
-    { v: 'self',      label: 'סינגור עצמי ודימוי עצמי', sd: 'self_advocacy' }
-  ],
-  motor_adl: [
-    { v: 'fine',  label: 'מוטוריקה עדינה וציוד', sd: 'fine_motor' },
-    { v: 'gross', label: 'מוטוריקה גסה ופעילות תנועתית', sd: 'gross_motor' },
-    { v: 'adl',   label: 'תפקוד יומיומי ועצמאות', sd: 'adl' }
-  ]
+
+var FOCUS_PLACEHOLDER = {
+  cognitive:  'לדוגמה: רוצה שהיא תלמד לעצור ולתכנן לפני שהיא מתחילה, כי היא קופצת ישר לפתרון.',
+  academic:   'לדוגמה: הדגש השנה על תשובה כתובה מלאה — הוא יודע את התוכן אבל התשובות שלו מילה אחת.',
+  learner:    'לדוגמה: העצמאות בשיעור. רוצה שיתחיל לבד בלי שאשב לידו בהתחלה של כל מטלה.',
+  social_emo: 'לדוגמה: ההפסקות. חשוב לי שתהיה לו קבוצה קבועה ולא שיסתובב לבד.',
+  language:   'לדוגמה: שיצליח לספר דבר שקרה לו בצורה שהמאזין מבין, עם התחלה ורצף.',
+  motor_adl:  'לדוגמה: העצמאות בהתארגנות — שיגיע ויתארגן לבד בלי שהסייעת תעשה במקומו.'
 };
 
-var EXAMPLE_PLACEHOLDER = {
-  cognitive:  'לדוגמה: בשיעור מדעים ביקשתי למיין בעלי חיים לפי בית גידול. היא מיינה יפה לפי הקריטריון שנתתי, אבל כשביקשתי למצוא קריטריון אחר בעצמה — נתקעה.',
-  language:   'לדוגמה: בשיחת בוקר הוא רוצה לספר משהו, מתחיל באמצע הסיפור בלי להגיד על מי מדובר, והילדים לא מבינים ומאבדים עניין.',
-  academic:   'לדוגמה: בשיעור חשבון, כשיש בעיה מילולית בת שתי שורות, הוא קורא אותה, מסתכל עליי ואומר "אני לא מבין מה עושים". אם אני מקריאה ומציירת — פותר לבד.',
-  learner:    'לדוגמה: בתחילת השיעור כולם מוציאים מחברת, והיא עדיין מחפשת בתיק. אחרי כשבע דקות עוד לא התחילה, גם אם הזכרתי פעמיים.',
-  social_emo: 'לדוגמה: בהפסקה הוא עומד ליד המשחק ומסתכל, ולא ניגש לבקש להצטרף. כשילד אחר מזמין אותו — הוא משחק בשמחה עשר דקות.',
-  motor_adl:  'לדוגמה: בזמן גזירה היא מחזיקה את המספריים בשתי ידיים והדף זז. במטלת הדבקה נדרשת עזרה של הסייעת כמעט לכל שלב.'
-};
 
 var WORKED_OPTIONS = [
   'ישיבה בקדמת הכיתה או ליד איש צוות','פיצול המשימה לשלבים קצרים','טיימר או שעון חול גלוי',
@@ -102,34 +72,6 @@ var WORKED_OPTIONS = [
   'הדהיית תיווך הדרגתית','שיח אישי ומשוב רפלקטיבי'
 ];
 
-var PROVIDERS = ['מורת שילוב','סייעת','טיפול פרטני','מורה מקצועית','צוות פארא-רפואי','אחר'];
-
-var EVAL = {
-  cognitive: {
-    mid: 'תצפית מובנית במשימות חשיבה, רישום מידת התיווך הנדרשת בכל משימה, ודגימות ביצוע אחת לשבועיים.',
-    end: 'משימת חשיבה מסכמת ללא תיווך, השוואה למידת התיווך בתחילת התקופה וסיכום בישיבת הצוות.'
-  },
-  language: {
-    mid: 'תצפית בשיח הכיתתי ובהפסקה, הקלטות קצרות של הבעה בעל פה, ורישום במחוון שיח אישי.',
-    end: 'הערכת שיח מסכמת, השוואה להקלטות הפתיחה, ומשוב מהקלינאית או מהיועצת במידת הצורך.'
-  },
-  academic: {
-    mid: 'תצפית שבועית בשיעור, דגימות ביצוע במחברת ורישום במחוון אישי. משוב מיידי לתלמיד/ה בסיום כל מטלה.',
-    end: 'מבדק תואם רמה בסוף התקופה, השוואה לנתוני הפתיחה, סיכום המחוונים ודיווח בישיבת הצוות.'
-  },
-  learner: {
-    mid: 'רישום יומי במחוון ההתארגנות והקשב, שיח משוב שבועי קצר עם התלמיד/ה, דיווח מהמורים המקצועיים.',
-    end: 'סיכום המחוונים לאורך התקופה, תצפית מובנית בסוף המחצית והשוואה לנקודת הפתיחה.'
-  },
-  social_emo: {
-    mid: 'תצפית בכיתה, בהפסקה ובחצר; יומן אירועים שבועי; שיח רפלקטיבי עם התלמיד/ה לאחר אירועים.',
-    end: 'סיכום התצפיות ויומן האירועים, משוב מחנכת ומצוות הכיתה, דיווח בוועדת מעקב.'
-  },
-  motor_adl: {
-    mid: 'תצפית מובנית בזמן הפעולה ורישום מידת העצמאות בכל שלב, אחת לשבוע.',
-    end: 'השוואת רמת העצמאות לתחילת התקופה וסיכום משותף עם הסייעת והצוות הפארא-רפואי.'
-  }
-};
 
 var PERIOD_MID = 'עד סוף מחצית א׳';
 var PERIOD_END = 'עד סוף שנת הלימודים';
@@ -138,9 +80,10 @@ var PERIOD_END = 'עד סוף שנת הלימודים';
 
 var S = null;
 function blankState() {
-  return { mode: 'interview', grade: '', disability: '', disability_note: '', setting: '', prior: '', prior_note: '',
-           domains: [], d: {}, o: {}, tl: {}, worked: [], worked_note: '', hours: '', providers: [],
-           ident: {}, profile: null, tables: null, step: 0 };
+  return { grade: '', disability: [], disability_note: '', setting: '', prior: '', prior_note: '',
+           hasSupport: '', supports: [], supports_note: '',
+           domains: [], d: {}, tl: {}, worked: [], worked_note: '',
+           profile: null, tables: null, step: 0 };
 }
 
 var KEY = 'tela.draft.v1';
@@ -162,86 +105,45 @@ function set(path, val) {
 
 /* ---------- בניית רצף השאלות ---------- */
 
-function subareaOf(domId, v) {
-  var list = SUBAREAS[domId] || [];
-  for (var i = 0; i < list.length; i++) if (list[i].v === v) return list[i];
-  return null;
-}
-
-function chosenSubdomain(domId) {
-  var sa = subareaOf(domId, get('d.' + domId + '.subarea'));
-  if (!sa) return null;
-  if (sa.sd) return sa.sd;
-  return get('d.' + domId + '.subdomain') || null;
-}
-
 function buildSteps() {
   var steps = [];
   steps.push({ key: 'grade', kind: 'single', q: 'באיזו כיתה לומד/ת התלמיד/ה?', grid: 'grades',
                options: GRADES.map(function (g) { return { v: g, label: g }; }) });
-  steps.push({ key: 'disability', kind: 'single', q: 'מה אפיון המוגבלות?', note: true,
-               openNoteFor: ['אחר'], notePlaceholder: 'מה האפיון?',
+  steps.push({ key: 'disability', kind: 'multi', q: 'מה אפיון המוגבלות?',
+               sub: 'אפשר לסמן יותר מאפיון אחד.', note: true,
+               noteLabel: 'להוסיף במילים שלי', notePlaceholder: 'מה האפיון?',
                options: DISABILITIES.map(function (x) { return { v: x, label: x }; }) });
-  steps.push({ key: 'setting', kind: 'single', q: 'באיזו מסגרת לומד/ת התלמיד/ה?',
+  steps.push({ key: 'setting', kind: 'single', q: 'מה סוג המסגרת בה לומד/ת התלמיד/ה?',
                options: SETTINGS });
   steps.push({ key: 'prior', kind: 'single', q: 'יש תוכנית קודמת או אבחון עדכני?',
                options: [{ v: 'yes', label: 'כן' }, { v: 'no', label: 'לא' }],
                noteIf: 'yes', notePlaceholder: 'מה עלה בתוכנית הקודמת או באבחון? מה כדאי להמשיך?' });
-  if (S.mode === 'radar') {
-    steps.push({ key: 'radar', kind: 'radar', q: 'רמזור פרופיל התלמיד/ה',
-                 sub: 'סמנו כל מיומנות: 🟢 חוזק · 🟡 חלקי · 🟠 לחיזוק. אפשר לדלג על מה שלא רלוונטי.' });
-    steps.push({ key: 'worked', kind: 'multi', q: 'מה כבר ניסיתם והצליח, ולו חלקית?',
-                 sub: 'זה הבסיס לעמודת הדרכים והאמצעים. אפשר לבחור כמה שרוצים.', note: true,
-                 options: WORKED_OPTIONS.map(function (x) { return { v: x, label: x }; }) });
-    steps.push({ key: 'support', kind: 'support', q: 'כמה שעות תמיכה שבועיות, ומי נותן אותן?' });
-    return steps;
+  steps.push({ key: 'hasSupport', kind: 'single', q: 'האם התלמיד/ה מקבל/ת תמיכות במסגרת ביה״ס?',
+               options: [{ v: 'yes', label: 'כן' }, { v: 'no', label: 'לא' }] });
+  if (S.hasSupport === 'yes') {
+    steps.push({ key: 'supports', kind: 'multi', q: 'אילו תמיכות התלמיד/ה מקבל/ת במסגרת ביה״ס?',
+                 sub: 'אפשר לסמן כמה שרוצים.', note: true,
+                 noteLabel: 'להוסיף במילים שלי', notePlaceholder: 'תמיכה נוספת',
+                 options: SUPPORTS.map(function (x) { return { v: x, label: x }; }) });
   }
 
-  steps.push({ key: 'domains', kind: 'cards', q: 'באילו תחומים הקושי המרכזי?',
-               sub: 'אפשר לבחור עד שלושה. התחומים שייבחרו יקבלו שאלות עומק.', max: 3 });
+  steps.push({ key: 'radar', kind: 'radar', q: 'רמזור פרופיל התלמיד/ה',
+               sub: 'עוברים תחום אחר תחום ומסמנים לכל מיומנות את רמת התפקוד והעצמאות היום. אפשר לדלג על מה שלא רלוונטי.' });
+
+  steps.push({ key: 'domains', kind: 'cards', q: 'באילו תחומים חשוב לך להתמקד השנה?',
+               sub: 'עד שלושה תחומים. התוכנית תיבנה סביבם, על בסיס מה שעלה ברמזור.', max: 3 });
 
   (S.domains || []).forEach(function (domId) {
-    var base = 'd.' + domId;
-    var list = SUBAREAS[domId] || [];
-    steps.push({ key: base + '.subarea', kind: 'single', tag: DOM_LABEL[domId],
-                 q: 'בתוך התחום ה' + DOM_LABEL[domId] + ', היכן הקושי המרכזי?',
-                 options: list.map(function (x) { return { v: x.v, label: x.label }; }) });
-
-    var sa = subareaOf(domId, get(base + '.subarea'));
-    if (sa && sa.branch) {
-      steps.push({ key: base + '.subdomain', kind: 'single', tag: DOM_LABEL[domId], q: sa.branch,
-                   options: sa.opts, resets: [base + '.r'] });
-    }
-    var sd = chosenSubdomain(domId);
-    if (sd) {
-      (BY_SUB[sd] || []).slice(0, 5).forEach(function (st) {
-        steps.push({ key: base + '.r.' + st.id, kind: 'single', tag: DOM_LABEL[domId],
-                     q: st.prompt, sub: 'מה מתאר הכי טוב את המצב היום?', stack: true, note: true,
-                     options: [
-                       { v: 'strength', label: st.strength,  hint: 'חוזק' },
-                       { v: 'partial',  label: st.partial,   hint: 'חלקי' },
-                       { v: 'weakness', label: st.weakness,  hint: 'קושי' }
-                     ] });
-      });
-      steps.push({ key: base + '.example', kind: 'text', tag: DOM_LABEL[domId],
-                   q: 'תן/י דוגמה קונקרטית ממה שקורה בשיעור',
-                   sub: 'משפט-שניים. הדוגמה נכנסת לפרופיל התלמיד/ה.',
-                   placeholder: EXAMPLE_PLACEHOLDER[domId] });
-    }
-  });
-
-  DOMAIN_CARDS.forEach(function (c) {
-    if ((S.domains || []).indexOf(c.id) > -1) return;
-    steps.push({ key: 'o.' + c.id, kind: 'single', tag: DOM_LABEL[c.id],
-                 q: 'בתחום ה' + c.label + ' — יש משהו שכדאי לדעת?',
-                 options: [{ v: 'ok', label: 'התחום תקין' }, { v: 'note', label: 'יש משהו שכדאי לדעת' }],
-                 noteIf: 'note', notePlaceholder: 'מה כדאי לדעת?' });
+    steps.push({ key: 'd.' + domId + '.focus', kind: 'text', tag: DOM_LABEL[domId],
+                 q: 'מה במיוחד חשוב לך להתמקד בו בתחום ה' + DOM_LABEL[domId] + '?',
+                 sub: 'אפשר לפרט, ואפשר לדלג — הניתוח יסתמך על מה שסימנת ברמזור.',
+                 placeholder: FOCUS_PLACEHOLDER[domId] || '' });
   });
 
   steps.push({ key: 'worked', kind: 'multi', q: 'מה כבר ניסיתם והצליח, ולו חלקית?',
                sub: 'זה הבסיס לעמודת הדרכים והאמצעים. אפשר לבחור כמה שרוצים.', note: true,
+               noteLabel: 'להוסיף במילים שלי', notePlaceholder: 'אסטרטגיה נוספת שעבדה',
                options: WORKED_OPTIONS.map(function (x) { return { v: x, label: x }; }) });
-  steps.push({ key: 'support', kind: 'support', q: 'כמה שעות תמיכה שבועיות, ומי נותן אותן?' });
   return steps;
 }
 
@@ -251,7 +153,7 @@ function ratingsOf(domId) { return get('d.' + domId + '.r') || {}; }
 
 /* מטרה נבחרת רק אם יש קושי מתועד שמפעיל אותה. אין מטרה בלי קושי. */
 function pickGoal(domId, exclude) {
-  var r = ratingsOf(domId), band = bandOf(S.grade), sd = chosenSubdomain(domId);
+  var r = ratingsOf(domId), band = bandOf(S.grade);
   var scored = BANK.goals.filter(function (g) {
     return g.domain === domId && (exclude || []).indexOf(g.id) < 0;
   }).map(function (g) {
@@ -260,7 +162,6 @@ function pickGoal(domId, exclude) {
       var v = r[id];
       if (v === 'weakness') trig += 3;
       else if (v === 'partial') trig += 2;
-      if (sd && ST[id] && ST[id].subdomain === sd) bonus += 1;
     });
     bonus += g.gradeBands.indexOf(band) > -1 ? 1 : -1;
     return { g: g, trig: trig, sc: trig + bonus };
@@ -269,15 +170,20 @@ function pickGoal(domId, exclude) {
   return scored.length ? scored[0].g : null;
 }
 
+function supportList() {
+  if (S.hasSupport !== 'yes') return [];
+  var arr = (S.supports || []).slice();
+  if (S.supports_note) arr.push(S.supports_note);
+  return arr;
+}
+
 function methodsFor(goal) {
   var out = [];
   var worked = (S.worked || []).slice(0, 4);
   if (S.worked_note) worked.push(S.worked_note);
   if (worked.length) out.push('נשען על מה שכבר עובד: ' + worked.join('; ') + '.');
   goal.methods.slice(0, 5).forEach(function (m) { out.push(m); });
-  var sup = [];
-  if (S.hours) sup.push(S.hours + ' שעות תמיכה שבועיות');
-  if ((S.providers || []).length) sup.push('במתן ' + S.providers.join(', '));
+  var sup = supportList();
   if (sup.length) out.push('מסגרת הביצוע: ' + sup.join(', ') + '.');
   return out;
 }
@@ -295,17 +201,17 @@ function buildTable(goal) {
   var midObjs = objs.slice(0, half);
   var endObjs = objs.slice(half);
   if (!endObjs.length) endObjs = objs.slice();
-  var ev = EVAL[goal.domain];
   var methods = methodsFor(goal);
   return {
     goalId: goal.id,
     title: goal.title,
     domain: goal.domain,
     rows: [
+      /* הערכה מעצבת ומסכמת נשארות ריקות — הן נכתבות בהמשך השנה, לא בשלב בניית התוכנית */
       { period: PERIOD_MID, objectives: midObjs, methods: methods, criteria: criteriaFor(goal, 'mid'),
-        formative: ev.mid, summative: 'בדיקת עמידה ביעד בסוף מחצית א׳ והצגתו בישיבת הצוות.' },
+        formative: '', summative: '' },
       { period: PERIOD_END, objectives: endObjs, methods: methods, criteria: criteriaFor(goal, 'end'),
-        formative: ev.mid, summative: ev.end }
+        formative: '', summative: '' }
     ]
   };
 }
@@ -319,14 +225,8 @@ function buildProfile() {
       if (r[id] === 'strength') strengths.push(st.strength);
       else needs.push(st[r[id]]);
     });
-    var ex = get('d.' + domId + '.example');
-    if (ex) needs.push('דוגמה מהשיעור (' + DOM_LABEL[domId] + '): ' + ex);
-    var notes = get('d.' + domId + '.r_notes') || {};
-    Object.keys(notes).forEach(function (k) { if (notes[k]) needs.push(notes[k]); });
-  });
-  Object.keys(S.o || {}).forEach(function (k) {
-    var note = get('o.' + k + '_note');
-    if (S.o[k] === 'note' && note) needs.push(DOM_LABEL[k] + ': ' + note);
+    var fx = get('d.' + domId + '.focus');
+    if (fx) needs.push('מוקד ההתמקדות (' + DOM_LABEL[domId] + '): ' + fx);
   });
   /* מיומנויות מהרמזור שאין להן היגד בבנק — נכנסות לפרופיל בלבד */
   (BANK.trafficLight || []).forEach(function (col) {
@@ -342,25 +242,26 @@ function buildProfile() {
 
   var worked = (S.worked || []).slice();
   if (S.worked_note) worked.push(S.worked_note);
-  var sup = [];
-  if (S.hours) sup.push(S.hours + ' שעות שבועיות');
-  if ((S.providers || []).length) sup.push(S.providers.join(', '));
+  var sup = supportList();
 
   var settingLabel = '';
   SETTINGS.forEach(function (x) { if (x.v === S.setting) settingLabel = x.label; });
+  var dis = (S.disability || []).slice();
+  if (S.disability_note) dis.push(S.disability_note);
 
   return {
     grade: 'כיתה ' + S.grade + (settingLabel ? ' · ' + settingLabel : ''),
-    disability: S.disability + (S.disability_note ? ' · ' + S.disability_note : ''),
+    disability: dis.length ? dis.join(' · ') : 'לא צוין אפיון',
     strengths: strengths.length ? strengths : ['לא סומנו מוקדי כוח בשלב המיפוי'],
     needs: needs.length ? needs : ['לא סומנו מוקדים לחיזוק'],
     worked: worked.length ? worked : ['טרם נוסו אסטרטגיות מובנות'],
-    support: sup.length ? sup : ['לא דווחו שעות תמיכה']
+    support: sup.length ? sup : (S.hasSupport === 'no' ? ['אינו מקבל תמיכות במסגרת ביה״ס'] : ['לא דווחו תמיכות'])
   };
 }
 
+/* כיתה רגילה ← תח״י · כיתת חנ״מ ובי״ס חנ״מ ← תל״א */
 function programLabel() {
-  var pt = S.setting === 'regular_integrated' ? 'regular_integrated' : 'special_ed';
+  var pt = S.setting === 'regular' ? 'regular_integrated' : 'special_ed';
   return BANK.programTypes[pt];
 }
 
@@ -385,37 +286,24 @@ function render() {
   renderQuestion();
 }
 
-var CREDIT = 'ממעבדת הניסויים של מרי גרבי בשיתוף שרון רז';
-
-function credit() {
-  var p = el('p', 'credit', CREDIT);
-  return p;
-}
-
 function renderHome() {
   var w = el('div', 'home');
   w.appendChild(el('div', 'logo', 'תל״א · תח״י'));
   w.appendChild(el('h1', null, 'בונה תל״א – תח״י'));
   w.appendChild(el('p', 'lead', 'מיפוי קצר, ובסוף תוכנית מוכנה להגשה.'));
-  var b = el('button', 'btn primary big', 'ראיון מונחה');
-  b.onclick = function () { S = blankState(); save(); screen = 'q'; render(); };
+  var b = el('button', 'btn primary big', 'התחלה');
+  b.onclick = function () { S = blankState(); radarOpen = null; save(); screen = 'q'; render(); };
   w.appendChild(b);
-  w.appendChild(el('p', 'modehint', 'שאלה אחת בכל מסך, לפי התחומים שתבחרו. כשש דקות.'));
-
-  var b3 = el('button', 'btn', 'מיפוי רמזור — טבלה מלאה');
-  b3.onclick = function () {
-    S = blankState(); S.mode = 'radar'; radarOpen = null; save(); screen = 'q'; render();
-  };
-  w.appendChild(b3);
-  w.appendChild(el('p', 'modehint', 'כל המיומנויות בטבלה אחת, לסימון בירוק · צהוב · כתום.'));
+  w.appendChild(el('p', 'modehint',
+    'נתוני בסיס, ואז רמזור תפקודי מלא — תחום אחר תחום. בסוף בוחרים במה להתמקד, והתוכנית נבנית.'));
   var draft = loadDraft();
   if (draft && (draft.grade || (draft.domains && draft.domains.length))) {
     var b2 = el('button', 'btn ghost', 'המשך טיוטה שמורה');
     b2.onclick = function () { S = draft; screen = S.tables ? 'result' : 'q'; render(); };
     w.appendChild(b2);
   }
-  w.appendChild(el('p', 'privacy', '🔒 הנתונים נשארים במכשיר שלך. גם שם התלמיד/ה אינו נשלח לשום מקום.'));
-  w.appendChild(credit());
+  w.appendChild(el('p', 'privacy',
+    '🔒 אין באפליקציה שדה לפרטי תלמיד/ה. בקובץ שיורד יש משבצות ריקות למילוי במחשב שלך.'));
   app.appendChild(w);
 }
 
@@ -455,7 +343,6 @@ function renderQuestion() {
   else if (st.kind === 'multi') renderMulti(card, st);
   else if (st.kind === 'cards') renderCards(card, st);
   else if (st.kind === 'text') renderText(card, st);
-  else if (st.kind === 'support') renderSupport(card, st);
   else if (st.kind === 'radar') renderRadar(card, st);
 
   app.appendChild(card);
@@ -566,7 +453,11 @@ function renderCards(card, st) {
     b.appendChild(el('span', 'ico', c.icon));
     var t = el('span', 'txt');
     t.appendChild(el('span', 'lbl', c.label));
-    t.appendChild(el('span', 'desc', c.sub));
+    var r = ratingsOf(c.id), n = 0;
+    Object.keys(r).forEach(function (k) { if (r[k] === 'partial' || r[k] === 'weakness') n++; });
+    t.appendChild(el('span', 'desc', n
+      ? n + ' מיומנויות סומנו כבתהליך למידה או כראשית הדרך'
+      : 'לא סומנו יעדים להתערבות בתחום זה'));
     b.appendChild(t);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
     b.onclick = function () {
@@ -593,43 +484,13 @@ function renderText(card, st) {
   ta.oninput = function () { set(st.key, ta.value); b.textContent = ta.value.trim() ? 'המשך' : 'דילוג'; };
 }
 
-function renderSupport(card, st) {
-  card.appendChild(el('p', 'sub2', 'כמה שעות שבועיות?'));
-  var hours = ['0','1','2','3','4','5','6+'];
-  var g = el('div', 'opts grid');
-  hours.forEach(function (h) {
-    var b = el('button', 'opt' + (S.hours === h ? ' on' : ''));
-    b.appendChild(el('span', 'lbl', h));
-    b.setAttribute('aria-pressed', S.hours === h ? 'true' : 'false');
-    b.onclick = function () { S.hours = h; save(); render(); };
-    g.appendChild(b);
-  });
-  card.appendChild(g);
-  card.appendChild(el('p', 'sub2', 'מי נותן אותן?'));
-  var list = el('div', 'opts');
-  PROVIDERS.forEach(function (p) {
-    var on = (S.providers || []).indexOf(p) > -1;
-    var b = el('button', 'opt' + (on ? ' on' : ''));
-    b.appendChild(el('span', 'lbl', p));
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    b.onclick = function () {
-      var arr = (S.providers || []).slice(), i = arr.indexOf(p);
-      if (i > -1) arr.splice(i, 1); else arr.push(p);
-      S.providers = arr; save(); render();
-    };
-    list.appendChild(b);
-  });
-  card.appendChild(list);
-  nextBtn(card, 'סיום המיפוי', function () { goto(S.step + 1); });
-}
 
 /* ---------- רמזור פרופיל תלמיד ---------- */
 
-var RADAR_LEVELS = [
-  { v: 'strength', label: 'חוזק',  dot: '🟢', cls: 'g' },
-  { v: 'partial',  label: 'חלקי',  dot: '🟡', cls: 'y' },
-  { v: 'weakness', label: 'לחיזוק', dot: '🟠', cls: 'o' }
-];
+var LEVEL_CLS = { strength: 'g', partial: 'y', weakness: 'o' };
+var RADAR_LEVELS = (BANK.trafficLightLevels || []).map(function (l) {
+  return { v: l.v, label: l.label, help: l.help, dot: l.dot, cls: LEVEL_CLS[l.v] };
+});
 
 var radarOpen = null;   // מזהה העמודה הפתוחה
 
@@ -641,9 +502,14 @@ function radarPathOf(skill, colId, idx) {
   return 'tl.' + colId + ':' + idx;
 }
 
+function radarSkills(col) {
+  return col.skills.filter(function (sk) { return !sk.section; });
+}
+
 function radarMarkedCount(col) {
   var n = 0;
   col.skills.forEach(function (sk, i) {
+    if (sk.section) return;
     var p = radarPathOf(sk, col.id, i);
     if (p && get(p)) n++;
   });
@@ -653,9 +519,21 @@ function radarMarkedCount(col) {
 function renderRadar(card, st) {
   var total = 0, marked = 0;
   BANK.trafficLight.forEach(function (col) {
-    total += col.skills.length;
+    total += radarSkills(col).length;
     marked += radarMarkedCount(col);
   });
+
+  var key = el('div', 'tlkey');
+  RADAR_LEVELS.forEach(function (lv) {
+    var item = el('span', 'tlkeyitem');
+    item.appendChild(el('span', 'tlkeydot ' + lv.cls, lv.dot));
+    var t = el('span', 'tlkeytxt');
+    t.appendChild(el('strong', null, lv.label));
+    t.appendChild(el('span', 'tlkeyhelp', lv.help || ''));
+    item.appendChild(t);
+    key.appendChild(item);
+  });
+  card.appendChild(key);
 
   var summary = el('p', 'counter', 'סומנו ' + marked + ' מיומנויות מתוך ' + total);
   card.appendChild(summary);
@@ -669,7 +547,7 @@ function renderRadar(card, st) {
     head.setAttribute('aria-expanded', open ? 'true' : 'false');
     head.appendChild(el('span', 'tlname', col.label));
     var cnt = radarMarkedCount(col);
-    head.appendChild(el('span', 'tlcount', cnt + '/' + col.skills.length));
+    head.appendChild(el('span', 'tlcount', cnt + '/' + radarSkills(col).length));
     head.appendChild(el('span', 'tlarrow', open ? '⌃' : '⌄'));
     head.onclick = function () { radarOpen = open ? null : col.id; render(); };
     box.appendChild(head);
@@ -677,6 +555,7 @@ function renderRadar(card, st) {
     if (open) {
       var rows = el('div', 'tlrows');
       col.skills.forEach(function (sk, i) {
+        if (sk.section) { rows.appendChild(el('div', 'tlsection', sk.label)); return; }
         var path = radarPathOf(sk, col.id, i);
         var cur = path ? get(path) : null;
         var row = el('div', 'tlrow');
@@ -736,7 +615,6 @@ function renderSummary() {
   card.appendChild(el('h2', null, 'פרופיל התלמיד/ה'));
   card.appendChild(el('p', 'sub', 'אפשר לערוך כל שדה לפני ההפקה. לחיצה על העיפרון פותחת עריכה.'));
 
-  addIdentCard(card);
   addProfileCard(card, 'כיתה ומסגרת', 'grade', [p.grade]);
   addProfileCard(card, 'אפיון', 'disability', [p.disability]);
   addProfileCard(card, 'מוקדי כוח', 'strengths', p.strengths);
@@ -756,38 +634,13 @@ var IDENT_FIELDS = [
   { k: 'filler',  label: 'שם ממלא/ת הדוח ותפקידו' }
 ];
 
-function addIdentCard(parent) {
-  var box = el('div', 'pcard');
-  box.appendChild(el('span', 'ptitle', 'פרטי זיהוי'));
-  box.appendChild(el('p', 'identnote', 'אופציונלי. נכנס לכותרת המסמכים ונשמר במכשיר שלך בלבד.'));
-  var grid = el('div', 'identgrid');
-  IDENT_FIELDS.forEach(function (f) {
-    var wrap = el('label', 'identfield');
-    wrap.appendChild(el('span', null, f.label));
-    var inp = document.createElement('input');
-    inp.type = 'text';
-    inp.value = get('ident.' + f.k) || '';
-    inp.setAttribute('aria-label', f.label);
-    inp.oninput = function () { set('ident.' + f.k, inp.value); };
-    wrap.appendChild(inp);
-    grid.appendChild(wrap);
-  });
-  box.appendChild(grid);
-  parent.appendChild(box);
-}
-
+/* משבצות ריקות למילוי במחשב של המורה — האפליקציה אינה מחזיקה פרטי תלמידים */
 function identLine() {
-  var parts = [];
-  IDENT_FIELDS.forEach(function (f) {
-    var v = get('ident.' + f.k);
-    if (v) parts.push(f.label + ': ' + v);
-  });
-  return parts;
+  return IDENT_FIELDS.map(function (f) { return f.label + ': ____________________'; });
 }
 
 function fileStem() {
-  var name = get('ident.name');
-  return (name ? name + ' — ' : '') + (S.grade ? 'כיתה ' + S.grade : 'תוכנית');
+  return S.grade ? 'כיתה ' + S.grade : 'תוכנית';
 }
 
 function addProfileCard(parent, title, key, items) {
@@ -830,12 +683,9 @@ var LOAD_MSGS = ['קורא את הפרופיל…','בוחר מטרות שמתא
 
 function produce() {
   screen = 'loading'; render();
-  S.deferred = [];
-  if (S.mode === 'radar') {
-    var ranked = radarDomains();
-    S.domains = ranked.slice(0, 3);
-    S.deferred = ranked.slice(3).map(function (d) { return DOM_LABEL[d]; });
-  }
+  var chosen = S.domains || [];
+  S.deferred = radarDomains().filter(function (d) { return chosen.indexOf(d) < 0; })
+                             .map(function (d) { return DOM_LABEL[d]; });
   var used = [], tables = [], skipped = [];
   (S.domains || []).forEach(function (domId) {
     var g = pickGoal(domId, used);
@@ -872,6 +722,8 @@ function renderLoading() {
 /* ---------- מסך התוצר ---------- */
 
 var COLS = ['יעד/יעדים','פרק זמן','דרכי ההוראה, השיטות והאמצעים','אמות מידה להערכה','הערכה מעצבת','הערכה מסכמת'];
+/* שתי עמודות ההערכה קיימות בקובץ ה-Word אך ריקות, ואינן מוצגות במסך העריכה */
+var SCREEN_COLS = COLS.slice(0, 4);
 
 function renderResult() {
   var pt = programLabel();
@@ -881,6 +733,12 @@ function renderResult() {
   t.appendChild(el('p', 'sub', 'כל תא ניתן לעריכה ישירות במסך. השינויים נשמרים ונכנסים לקובץ.'));
   head.appendChild(t);
   app.appendChild(head);
+
+  var evnote = el('div', 'notice soft');
+  evnote.appendChild(el('strong', null, 'עמודות ההערכה המעצבת והמסכמת יורדות ריקות. '));
+  evnote.appendChild(document.createTextNode(
+    'הן חלק מהטופס, אבל נכתבות בהמשך השנה ולא בשלב בניית התוכנית.'));
+  app.appendChild(evnote);
 
   if ((S.skipped || []).length) {
     var n = el('div', 'notice');
@@ -893,7 +751,7 @@ function renderResult() {
     var n2 = el('div', 'notice');
     n2.appendChild(el('strong', null, 'סומנו קשיים גם בתחום ' + S.deferred.join(' וב') + '. '));
     n2.appendChild(document.createTextNode(
-      'התוכנית נבנתה סביב שלושת התחומים שבהם הקושי החריף ביותר, כדי שתישאר ברת-ביצוע. כל הקשיים נשמרו בפרופיל, ואפשר להוסיף מטרה נוספת בכפתור למטה.'));
+      'התוכנית נבנתה סביב התחומים שבחרת להתמקד בהם, כדי שתישאר ברת-ביצוע. כל מה שסומן ברמזור נשמר בפרופיל, ואפשר להוסיף מטרה נוספת בכפתור למטה.'));
     app.appendChild(n2);
   }
 
@@ -913,17 +771,15 @@ function renderResult() {
 
     var table = el('table', 'plan');
     var tr = el('tr');
-    COLS.forEach(function (c) { tr.appendChild(el('th', null, c)); });
+    SCREEN_COLS.forEach(function (c) { tr.appendChild(el('th', null, c)); });
     var thead = el('thead'); thead.appendChild(tr); table.appendChild(thead);
     var tbody = el('tbody');
-    tb.rows.forEach(function (row, ri) {
+    tb.rows.forEach(function (row) {
       var r = el('tr');
       r.appendChild(cell(COLS[0], listHtml(row.objectives), function (v) { row.objectives = v.split('\n').filter(Boolean); }));
       r.appendChild(cell(COLS[1], row.period, function (v) { row.period = v; }));
       r.appendChild(cell(COLS[2], listHtml(row.methods), function (v) { row.methods = v.split('\n').filter(Boolean); }));
       r.appendChild(cell(COLS[3], row.criteria, function (v) { row.criteria = v; }));
-      r.appendChild(cell(COLS[4], row.formative, function (v) { row.formative = v; }));
-      r.appendChild(cell(COLS[5], row.summative, function (v) { row.summative = v; }));
       tbody.appendChild(r);
     });
     table.appendChild(tbody);
@@ -941,7 +797,6 @@ function renderResult() {
     clearDraft(); S = blankState(); screen = 'home'; render();
   });
   app.appendChild(acts);
-  app.appendChild(credit());
 }
 
 function cell(label, text, onEdit) {
@@ -1102,7 +957,7 @@ function profileDocXml() {
   body += wp('מה שכבר עובד: ' + S.profile.worked.join('; '), { size: 22 });
   body += wp('משאבי תמיכה: ' + S.profile.support.join('; '), { size: 22 });
   body += wp('');
-  body += wp(CREDIT, { size: 18 });
+
   return docShell(body, false);
 }
 
@@ -1168,7 +1023,7 @@ function planDocXml() {
     body += wp('');
   });
 
-  body += wp(CREDIT, { size: 18 });
+
   return docShell(body, true);
 }
 
