@@ -475,13 +475,15 @@ function renderMulti(card, st) {
 }
 
 function renderCards(card, st) {
-  var cur = S.focus || [];
+  var cur = S.focus || [], available = 0;
   var list = el('div', 'domaincards');
   BANK.trafficLight.forEach(function (col) {
     var marks = markedInColumn(col);
     var on = cur.indexOf(col.id) > -1;
+    var empty = !marks.length;
     var full = cur.length >= st.max && !on;
-    var b = el('button', 'dcard' + (on ? ' on' : '') + (full ? ' dim' : ''));
+    var b = el('button', 'dcard' + (on ? ' on' : '') + (empty ? ' off' : (full ? ' dim' : '')));
+    if (empty) { b.disabled = true; b.setAttribute('aria-disabled', 'true'); }
     b.appendChild(el('span', 'ico', COL_ICON[col.id] || '•'));
     var t = el('span', 'txt');
     t.appendChild(el('span', 'lbl', col.label));
@@ -492,18 +494,33 @@ function renderCards(card, st) {
     if (yellow) parts.push('🟡 ' + yellow);
     t.appendChild(el('span', 'desc', parts.length
       ? parts.join(' · ') + ' — יעדים להתערבות'
-      : 'לא סומנו יעדים להתערבות בתחום זה'));
+      : 'אין כאן יעדים להתערבות — הכול סומן כעצמאי'));
     b.appendChild(t);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    b.onclick = function () {
-      var arr = (S.focus || []).slice(), i = arr.indexOf(col.id);
-      if (i > -1) arr.splice(i, 1);
-      else { if (arr.length >= st.max) return; arr.push(col.id); }
-      S.focus = arr; save(); soft();
-    };
+    if (!empty) {
+      b.onclick = function () {
+        var arr = (S.focus || []).slice(), i = arr.indexOf(col.id);
+        if (i > -1) arr.splice(i, 1);
+        else { if (arr.length >= st.max) return; arr.push(col.id); }
+        S.focus = arr; save(); soft();
+      };
+    }
     list.appendChild(b);
+    if (!empty) available++;
   });
   card.appendChild(list);
+
+  if (!available) {
+    /* אין על מה לבנות תוכנית — מחזירים לרמזור במקום להשאיר מסך תקוע */
+    var none = el('div', 'notice');
+    none.appendChild(el('strong', null, 'עדיין לא סומן אף יעד להתערבות. '));
+    none.appendChild(document.createTextNode(
+      'תוכנית נבנית ממה שסומן 🟡 או 🔴 ברמזור. כדאי לחזור ולסמן לפחות מיומנות אחת.'));
+    card.appendChild(none);
+    nextBtn(card, 'חזרה לרמזור', function () { gotoStep('radar'); });
+    return;
+  }
+
   card.appendChild(el('p', 'counter', 'נבחרו ' + cur.length + ' מתוך ' + st.max));
   nextBtn(card, 'המשך', function () { goto(S.step + 1); }, cur.length === 0);
 }
@@ -783,8 +800,10 @@ function produce() {
     S.skipped = skipped;
     if (!tables.length) {
       screen = 'summary'; render();
-      showError('בתחומים שנבחרו לא סומן יעד להתערבות, ולכן לא נבנתה תוכנית. כדאי לחזור לרמזור ולסמן 🟡 או 🔴, או להוסיף מטרה ידנית מהמאגר.',
-                function () { screen = 'q'; goto(0); });
+      showError('בתחומים שבחרת לא נמצא יעד שאפשר לבנות ממנו מטרה. אפשר לבחור תחום אחר, או לחזור לרמזור ולסמן 🟡 או 🔴.',
+                [{ label: 'חזרה לבחירת התחומים', cls: 'primary', fn: function () { gotoStep('focus'); } },
+                 { label: 'חזרה לרמזור', fn: function () { gotoStep('radar'); } }],
+                'צריך לבחור שוב');
       return;
     }
     S.tables = tables; save();
@@ -1198,17 +1217,35 @@ function downloadDocx(builder, stem, retry) {
   }
 }
 
-function showError(msg, retry) {
+/* actions: [{label, cls, fn}] — כל כפתור מחזיר לשלב שממנו אפשר לתקן,
+   ולא לתחילת השאלון. actions ריק נופל חזרה ל"ניסיון חוזר" בודד. */
+function showError(msg, actions, title) {
   var back = el('div', 'modalback');
   var m = el('div', 'modal');
-  m.appendChild(el('h3', null, 'משהו השתבש'));
-  m.appendChild(el('p', null, msg + ' התשובות שלך נשמרו ולא הלכו לאיבוד.'));
-  var r = el('button', 'btn primary', 'ניסיון חוזר');
-  r.onclick = function () { document.body.removeChild(back); retry(); };
+  m.appendChild(el('h3', null, title || 'משהו השתבש'));
+  m.appendChild(el('p', null, msg + ' כל מה שסימנת נשמר ולא הלך לאיבוד.'));
+  if (typeof actions === 'function') actions = [{ label: 'ניסיון חוזר', cls: 'primary', fn: actions }];
+  (actions || []).forEach(function (a) {
+    var b = el('button', 'btn ' + (a.cls || ''), a.label);
+    b.onclick = function () { document.body.removeChild(back); a.fn(); };
+    m.appendChild(b);
+  });
   var c = el('button', 'btn ghost', 'סגירה');
   c.onclick = function () { document.body.removeChild(back); };
-  m.appendChild(r); m.appendChild(c);
+  m.appendChild(c);
   back.appendChild(m); document.body.appendChild(back);
+}
+
+/* מיקום שלב לפי המפתח שלו, כדי שהחזרה תהיה לצעד הנכון ולא לצעד קבוע */
+function stepIndex(key) {
+  var steps = buildSteps(), idx = -1;
+  steps.forEach(function (s, i) { if (s.key === key) idx = i; });
+  return idx;
+}
+function gotoStep(key) {
+  var i = stepIndex(key);
+  screen = 'q';
+  goto(i > -1 ? i : 0);
 }
 
 /* ---------- הפעלה ---------- */
