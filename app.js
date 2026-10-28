@@ -63,7 +63,8 @@ var SETTINGS = [
 
 var SUPPORTS = [
   'הוראה מותאמת','תומכת הוראה (סיוע)','קלינאית תקשורת',
-  'מרפאה בעיסוק','פיזיותרפיה','טיפול באומנויות','אחר'
+  'מרפאה בעיסוק','פיזיותרפיה','טיפול באומנויות',
+  'ניתוח התנהגות','קבוצה חברתית','אחר'
 ];
 
 /* אייקון ודוגמה לכל עמודה ברמזור. מסך ההתמקדות מדבר באותן עמודות
@@ -102,7 +103,8 @@ var S = null;
 function blankState() {
   return { stage: '', grade: '', disability: [], disability_note: '', setting: '', prior: '', prior_note: '',
            hasSupport: '', supports: [], supports_note: '',
-           focus: [], focusText: {}, d: {}, tl: {}, worked: [], worked_note: '',
+           focus: [], focusText: {}, voiceStudent: '', voiceParents: '',
+           d: {}, tl: {}, worked: [], worked_note: '',
            profile: null, tables: null, step: 0 };
 }
 
@@ -165,6 +167,16 @@ function buildSteps() {
                  sub: 'אפשר לפרט, ואפשר לדלג — הניתוח יסתמך על מה שסימנת ברמזור.',
                  placeholder: FOCUS_PLACEHOLDER[colId] || '' });
   });
+
+  /* קול התלמיד/ה מנוסח בגוף ראשון, כדי שאפשר יהיה לסובב את המסך ולכתוב יחד */
+  steps.push({ key: 'voiceStudent', kind: 'text', tag: 'קול התלמיד/ה',
+               q: 'מה חשוב לי להתמקד בו השנה?',
+               sub: 'אפשר לסובב את המסך ולכתוב יחד, במילים של התלמיד/ה. ואפשר לדלג.',
+               placeholder: 'לדוגמה: אני רוצה שיהיה לי עם מי לשחק בהפסקה, ושלא אהיה לבד.' });
+  steps.push({ key: 'voiceParents', kind: 'text', tag: 'קול ההורים',
+               q: 'מה חשוב להורים שנתמקד בו השנה?',
+               sub: 'במילים של ההורים, מתוך שיחה או מהוועדה. אפשר לדלג.',
+               placeholder: 'לדוגמה: בבית הכי קשה לנו הבקרים. חשוב להם שילמד להתארגן לבד.' });
 
   steps.push({ key: 'worked', kind: 'multi', q: 'מה כבר ניסיתם והצליח, ולו חלקית?',
                sub: 'זה הבסיס לעמודת הדרכים והאמצעים. אפשר לבחור כמה שרוצים.', note: true,
@@ -295,11 +307,16 @@ function buildProfile() {
   var dis = (S.disability || []).slice();
   if (S.disability_note) dis.push(S.disability_note);
 
+  var voices = [];
+  if (S.voiceStudent) voices.push('התלמיד/ה: ' + S.voiceStudent);
+  if (S.voiceParents) voices.push('ההורים: ' + S.voiceParents);
+
   return {
     grade: gradeLabel() + (settingLabel ? ' · ' + settingLabel : ''),
     disability: dis.length ? dis.join(' · ') : 'לא צוין אפיון',
     strengths: strengths.length ? strengths : ['לא סומנו מוקדי כוח בשלב המיפוי'],
     needs: needs.length ? needs : ['לא סומנו מוקדים לחיזוק'],
+    voices: voices.length ? voices : ['לא תועדו'],
     worked: worked.length ? worked : ['טרם נוסו אסטרטגיות מובנות'],
     support: sup.length ? sup : (S.hasSupport === 'no' ? ['אינו מקבל תמיכות במסגרת ביה״ס'] : ['לא דווחו תמיכות'])
   };
@@ -776,6 +793,7 @@ function renderSummary() {
   addProfileCard(card, 'אפיון', 'disability', [p.disability]);
   addProfileCard(card, 'מוקדי כוח', 'strengths', p.strengths);
   addProfileCard(card, 'מוקדים לחיזוק', 'needs', p.needs);
+  addProfileCard(card, 'קול התלמיד/ה וההורים', 'voices', p.voices);
   addProfileCard(card, 'מה שכבר עובד', 'worked', p.worked);
   addProfileCard(card, 'משאבי תמיכה', 'support', p.support);
 
@@ -1010,6 +1028,7 @@ function planText() {
   var out = [pt.fullName + ' (' + pt.label + ')'].concat(identLine(), [S.profile.grade, '']);
   out.push('מוקדי כוח: ' + S.profile.strengths.join('; '));
   out.push('מוקדים לחיזוק: ' + S.profile.needs.join('; '));
+  out.push('קול התלמיד/ה וההורים: ' + S.profile.voices.join('; '));
   out.push('מה שכבר עובד: ' + S.profile.worked.join('; '));
   out.push('משאבי תמיכה: ' + S.profile.support.join('; '));
   out.push('');
@@ -1116,6 +1135,7 @@ function profileDocXml() {
   });
   body += wtable(rows, 10800);
   body += wp('');
+  body += wp('קול התלמיד/ה וההורים: ' + S.profile.voices.join('; '), { size: 22 });
   body += wp('מה שכבר עובד: ' + S.profile.worked.join('; '), { size: 22 });
   body += wp('משאבי תמיכה: ' + S.profile.support.join('; '), { size: 22 });
   body += wp('');
@@ -1164,6 +1184,7 @@ function planDocXml() {
   body += wp('');
   body += wp('מוקדי כוח: ' + S.profile.strengths.join('; '), { size: 22 });
   body += wp('מוקדים לחיזוק: ' + S.profile.needs.join('; '), { size: 22 });
+  body += wp('קול התלמיד/ה וההורים: ' + S.profile.voices.join('; '), { size: 22 });
   body += wp('מה שכבר עובד: ' + S.profile.worked.join('; '), { size: 22 });
   body += wp('משאבי תמיכה: ' + S.profile.support.join('; '), { size: 22 });
   body += wp('');
