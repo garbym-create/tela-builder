@@ -237,7 +237,8 @@ function methodsFor(goal) {
   var worked = (S.worked || []).slice(0, 4);
   if (S.worked_note) worked.push(S.worked_note);
   if (worked.length) out.push('נשען על מה שכבר עובד: ' + worked.join('; ') + '.');
-  goal.methods.slice(0, 5).forEach(function (m) { out.push(m); });
+  /* כל האמצעים מוצגים. חיתוך שקט הסתיר בעבר אמצעים שנכתבו ואיש לא ידע */
+  goal.methods.forEach(function (m) { out.push(m); });
   var sup = supportList();
   if (sup.length) out.push('מסגרת הביצוע: ' + sup.join(', ') + '.');
   return out;
