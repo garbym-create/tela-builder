@@ -16,14 +16,36 @@ function domainOfStatement(id) { return ST[id] ? SUB_DOM[ST[id].subdomain] : nul
 
 /* ---------- הגדרות תוכן ---------- */
 
-var GRADES = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב'];
+var GRADES = ['גן','א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב'];
+var STAGE_ICON = { early: '🧸', mid: '🎒', high: '🎓' };
 
+function stages() { return BANK.stages || []; }
+function stageOf(v) {
+  var out = null;
+  stages().forEach(function (s) { if (s.v === v) out = s; });
+  return out;
+}
+function currentStage() { return S && S.stage ? S.stage : 'mid'; }
+
+/* העמודות של הרמזור השייך לשלב הגיל שנבחר */
+function radarColumns() {
+  var st = currentStage();
+  return BANK.trafficLight.filter(function (c) { return (c.stage || 'mid') === st; });
+}
+
+function stageGrades() {
+  var s = stageOf(currentStage());
+  return (s && s.grades) || GRADES;
+}
+
+/* "גן" אינו כיתה, ולכן אינו מקבל את התחילית */
+function gradeLabel() { return S.grade === 'גן' ? 'גן' : 'כיתה ' + S.grade; }
 function bandOf(grade) {
   var i = GRADES.indexOf(grade);
   if (i < 0) return '3-4';
-  if (i <= 1) return '1-2';
-  if (i <= 3) return '3-4';
-  if (i <= 5) return '5-6';
+  if (i <= 2) return '1-2';   /* גן, א׳, ב׳ */
+  if (i <= 4) return '3-4';
+  if (i <= 6) return '5-6';
   return '7-9';
 }
 
@@ -78,7 +100,7 @@ var PERIOD_END = 'עד סוף שנת הלימודים';
 
 var S = null;
 function blankState() {
-  return { grade: '', disability: [], disability_note: '', setting: '', prior: '', prior_note: '',
+  return { stage: '', grade: '', disability: [], disability_note: '', setting: '', prior: '', prior_note: '',
            hasSupport: '', supports: [], supports_note: '',
            focus: [], focusText: {}, d: {}, tl: {}, worked: [], worked_note: '',
            profile: null, tables: null, step: 0 };
@@ -105,8 +127,12 @@ function set(path, val) {
 
 function buildSteps() {
   var steps = [];
+  steps.push({ key: 'stage', kind: 'stages', q: 'באיזה שלב גיל נמצא/ת התלמיד/ה?',
+               sub: 'הבחירה קובעת איזה מחוון רמזור ייפתח, ואילו כיתות יוצגו.' });
+  if (!S.stage || (stageOf(S.stage) || {}).soon) return steps;
+
   steps.push({ key: 'grade', kind: 'single', q: 'באיזו כיתה לומד/ת התלמיד/ה?', grid: 'grades',
-               options: GRADES.map(function (g) { return { v: g, label: g }; }) });
+               options: stageGrades().map(function (g) { return { v: g, label: g }; }) });
   steps.push({ key: 'disability', kind: 'multi', q: 'מה אפיון המוגבלות?',
                sub: 'אפשר לסמן יותר מאפיון אחד.', note: true,
                noteLabel: 'להוסיף במילים שלי', notePlaceholder: 'מה האפיון?',
@@ -270,7 +296,7 @@ function buildProfile() {
   if (S.disability_note) dis.push(S.disability_note);
 
   return {
-    grade: 'כיתה ' + S.grade + (settingLabel ? ' · ' + settingLabel : ''),
+    grade: gradeLabel() + (settingLabel ? ' · ' + settingLabel : ''),
     disability: dis.length ? dis.join(' · ') : 'לא צוין אפיון',
     strengths: strengths.length ? strengths : ['לא סומנו מוקדי כוח בשלב המיפוי'],
     needs: needs.length ? needs : ['לא סומנו מוקדים לחיזוק'],
@@ -373,6 +399,7 @@ function renderQuestion() {
   else if (st.kind === 'cards') renderCards(card, st);
   else if (st.kind === 'text') renderText(card, st);
   else if (st.kind === 'radar') renderRadar(card, st);
+  else if (st.kind === 'stages') renderStages(card, st);
 
   app.appendChild(card);
   if (!softRender) {
@@ -474,10 +501,39 @@ function renderMulti(card, st) {
   nextBtn(card, cur.length ? 'המשך' : 'דילוג', function () { goto(S.step + 1); });
 }
 
+/* שלב הגיל נבחר ראשון, והוא שקובע איזה מחוון רמזור ייפתח */
+function renderStages(card, st) {
+  var list = el('div', 'domaincards');
+  stages().forEach(function (sg) {
+    var on = S.stage === sg.v;
+    var b = el('button', 'dcard' + (on ? ' on' : '') + (sg.soon ? ' off' : ''));
+    if (sg.soon) { b.disabled = true; b.setAttribute('aria-disabled', 'true'); }
+    b.appendChild(el('span', 'ico', STAGE_ICON[sg.v] || '•'));
+    var t = el('span', 'txt');
+    t.appendChild(el('span', 'lbl', sg.label));
+    t.appendChild(el('span', 'desc', sg.sub + ' · כיתות ' + sg.grades.join(', ')));
+    b.appendChild(t);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (!sg.soon) {
+      b.onclick = function () {
+        if (S.stage !== sg.v) {
+          /* מעבר בין שלבים מאפס את הסימונים, כי זה מחוון אחר לגמרי */
+          S.stage = sg.v; S.grade = ''; S.d = {}; S.tl = {}; S.focus = []; S.focusText = {};
+          radarOpen = null; radarDeep = {}; lastBulk = null;
+          save();
+        }
+        goto(S.step + 1);
+      };
+    }
+    list.appendChild(b);
+  });
+  card.appendChild(list);
+}
+
 function renderCards(card, st) {
   var cur = S.focus || [], available = 0;
   var list = el('div', 'domaincards');
-  BANK.trafficLight.forEach(function (col) {
+  radarColumns().forEach(function (col) {
     var marks = markedInColumn(col);
     var on = cur.indexOf(col.id) > -1;
     var empty = !marks.length;
@@ -582,7 +638,7 @@ function radarMarkedCount(col) {
 
 function renderRadar(card, st) {
   var coreTotal = 0, coreMarked = 0, extraMarked = 0;
-  BANK.trafficLight.forEach(function (col) {
+  radarColumns().forEach(function (col) {
     col.skills.forEach(function (sk, i) {
       if (sk.section) return;
       var p = radarPathOf(sk, col.id, i), on = p && get(p);
@@ -608,9 +664,9 @@ function renderRadar(card, st) {
     'סומנו ' + coreMarked + ' מתוך ' + coreTotal + ' מיומנויות הליבה' +
     (extraMarked ? ' · ועוד ' + extraMarked + ' מיומנויות עומק' : '')));
 
-  if (radarOpen === null) radarOpen = BANK.trafficLight[0].id;
+  if (radarOpen === null) radarOpen = radarColumns()[0].id;
 
-  BANK.trafficLight.forEach(function (col) {
+  radarColumns().forEach(function (col) {
     var box = el('div', 'tlcol');
     var open = radarOpen === col.id;
     var head = el('button', 'tlhead' + (open ? ' on' : ''));
@@ -741,7 +797,7 @@ function identLine() {
 }
 
 function fileStem() {
-  return S.grade ? 'כיתה ' + S.grade : 'תוכנית';
+  return S.grade ? gradeLabel() : 'תוכנית';
 }
 
 function addProfileCard(parent, title, key, items) {
@@ -786,7 +842,7 @@ function produce() {
   screen = 'loading'; render();
   var chosen = S.focus || [];
   S.deferred = [];
-  BANK.trafficLight.forEach(function (col) {
+  radarColumns().forEach(function (col) {
     if (chosen.indexOf(col.id) < 0 && markedInColumn(col).length) S.deferred.push(col.label);
   });
   var used = [], tables = [], skipped = [];

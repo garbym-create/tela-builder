@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": "0.4",
+    "version": "0.5",
     "language": "he",
     "source": "בנק היגדים, מאגר מטרות ויעדים, מאגר היגדים במתמטיקה (כיתה א'), ריכוז מטרות רגשיות וחברתיות (מתי\"א אשדוד) — עיבוד. גרסה 0.4 מחליפה את הרמזור ברמזור אפירמטיבי מלא. גרסה 0.3 הרחיבה לפי חומרי שרון רז: בנק מוקדי כוח וחיזוק, נקודות להתייחסות בפרופיל תלמיד, רמזור פרופיל תלמיד, והסבר על תחומים ורמות תפקוד.",
     "note": "תח\"י ותל\"א זהים בתוכן; ההבדל הוא המסגרת. שדה programType נקבע לפי סוג הכיתה שנבחר בראיון.",
@@ -1279,6 +1279,187 @@
       "partial": "מתארגן בלבוש ובציוד בתזכורת",
       "weakness": "ראשית הדרך בהתארגנות עצמאית בלבוש ובציוד",
       "cognitiveTags": []
+    },
+    {
+      "id": "st_listen_act",
+      "subdomain": "comprehension_instructions",
+      "prompt": "הקשבה להוראה וביצועה",
+      "strength": "מקשיב להוראות ופועל בהתאם להן",
+      "partial": "פועל לפי ההוראה לאחר חזרה או הדגמה",
+      "weakness": "ראשית הדרך בהקשבה להוראה ובביצועה",
+      "cognitiveTags": [
+        "קשב"
+      ]
+    },
+    {
+      "id": "st_memory_apply",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "זכירה ויישום של מידע שנלמד",
+      "strength": "זוכר ומיישם מידע שנלמד",
+      "partial": "זוכר ומיישם מידע בעזרת רמז או תזכורת",
+      "weakness": "ראשית הדרך בזכירת הנלמד וביישומו",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_problem_explore",
+      "subdomain": "cognitive_reasoning",
+      "prompt": "התנסות בפתרון בעיות",
+      "strength": "מתנסה בפתרון בעיות ומחפש דרכי פעולה בעצמו",
+      "partial": "מחפש דרכי פעולה בעזרת הכוונה",
+      "weakness": "ראשית הדרך בהתנסות בפתרון בעיות",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_listen_other",
+      "subdomain": "discourse",
+      "prompt": "הקשבה והתייחסות לדברי האחר",
+      "strength": "מקשיב לדברי האחר ומתייחס אליהם",
+      "partial": "מקשיב ומתייחס לדברי האחר בתיווך",
+      "weakness": "ראשית הדרך בהקשבה ובהתייחסות לדברי האחר",
+      "cognitiveTags": [
+        "קשב"
+      ]
+    },
+    {
+      "id": "st_narrative",
+      "subdomain": "language_oral",
+      "prompt": "סיפור אירועים ברצף",
+      "strength": "מספר על אירועים וחוויות ברצף הגיוני",
+      "partial": "מספר על אירועים ברצף בעזרת שאלות מנחות",
+      "weakness": "ראשית הדרך בסיפור אירועים ברצף הגיוני",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_negotiate",
+      "subdomain": "social_cognition",
+      "prompt": "ניהול משא ומתן",
+      "strength": "מנהל משא ומתן בצורה מכבדת",
+      "partial": "מנהל משא ומתן בתיווך מבוגר",
+      "weakness": "ראשית הדרך בניהול משא ומתן מכבד",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_helping",
+      "subdomain": "social_cognition",
+      "prompt": "עזרה והושטת יד",
+      "strength": "עוזר ומושיט יד לאחרים כשצריך",
+      "partial": "עוזר לאחרים כשמבקשים ממנו",
+      "weakness": "ראשית הדרך בזיהוי הצורך של האחר ובהושטת יד",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_humor",
+      "subdomain": "social_cognition",
+      "prompt": "חוש הומור",
+      "strength": "מבין ומביע חוש הומור ובדיחות בצורה מותאמת",
+      "partial": "מבין הומור מוכר, וזקוק להסבר על בדיחות חדשות",
+      "weakness": "ראשית הדרך בהבנת הומור ובהבעתו",
+      "cognitiveTags": [
+        "הסקת מסקנות"
+      ]
+    },
+    {
+      "id": "st_lead_follow",
+      "subdomain": "peer_relations",
+      "prompt": "מנהיגות והנהגה הדדית",
+      "strength": "יודע להיות מנהיג וגם להיות מונהג ולאפשר לאחרים להוביל",
+      "partial": "מוביל או נותן לאחרים להוביל בתיווך",
+      "weakness": "ראשית הדרך באיזון בין הובלה לבין מתן מקום לאחרים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_graphomotor",
+      "subdomain": "writing_motor",
+      "prompt": "תוצרים גרפומוטוריים",
+      "strength": "מצייר, מעתיק ומפיק תוצרים גרפומוטוריים בהתאם לגיל",
+      "partial": "מפיק תוצרים גרפומוטוריים בעזרת הדגמה או תבנית",
+      "weakness": "ראשית הדרך בהפקת תוצרים גרפומוטוריים תואמי גיל",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_cutting",
+      "subdomain": "fine_motor",
+      "prompt": "גזירה, הדבקה וחומרי יצירה",
+      "strength": "גוזר, מדביק ומשתמש בחומרי יצירה באופן עצמאי",
+      "partial": "גוזר ומדביק בעזרת ייצוב הדף או הכוונה",
+      "weakness": "ראשית הדרך בגזירה, בהדבקה ובשימוש בחומרי יצירה",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_motor_coordination",
+      "subdomain": "gross_motor",
+      "prompt": "תיאום תנועות גוף",
+      "strength": "מתאם תנועות גוף ומבצע תנועות מגוונות",
+      "partial": "מתאם תנועות מוכרות, ומתנסה בחדשות בהדגמה",
+      "weakness": "ראשית הדרך בתיאום תנועות גוף ובגיוון התנועתי",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_balance",
+      "subdomain": "gross_motor",
+      "prompt": "שיווי משקל",
+      "strength": "שומר על שיווי משקל במהלך פעילות",
+      "partial": "שומר על שיווי משקל בפעילות מוכרת או בתמיכה",
+      "weakness": "ראשית הדרך בשמירה על שיווי משקל בפעילות",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_touch_boundaries",
+      "subdomain": "rules_authority",
+      "prompt": "מגע מותאם בילדים אחרים",
+      "strength": "נוגע באופן מותאם בילדים אחרים",
+      "partial": "נוגע באופן מותאם בתזכורת ובהכנה מראש",
+      "weakness": "ראשית הדרך בוויסות המגע בילדים אחרים",
+      "cognitiveTags": [
+        "בקרה עצמית"
+      ]
+    },
+    {
+      "id": "st_hygiene",
+      "subdomain": "adl",
+      "prompt": "היגיינה אישית בסיסית",
+      "strength": "מקפיד על היגיינה אישית בסיסית",
+      "partial": "מקפיד על היגיינה בתזכורת",
+      "weakness": "ראשית הדרך בהקפדה על היגיינה אישית בסיסית",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_grooming",
+      "subdomain": "adl",
+      "prompt": "מראה נקי ומסודר",
+      "strength": "לרוב נקי, מסודר ומטופח",
+      "partial": "נקי ומסודר בעזרת תזכורת או סיוע",
+      "weakness": "ראשית הדרך בשמירה על מראה נקי ומסודר",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_toileting",
+      "subdomain": "adl",
+      "prompt": "שימוש עצמאי בשירותים",
+      "strength": "משתמש בשירותים באופן עצמאי בהתאם לצורך",
+      "partial": "משתמש בשירותים בליווי או בתזכורת",
+      "weakness": "ראשית הדרך בשימוש עצמאי בשירותים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_food_variety",
+      "subdomain": "adl",
+      "prompt": "התנסות במגוון מאכלים",
+      "strength": "מתנסה במגוון מאכלים",
+      "partial": "מתנסה במאכל חדש בהכנה מראש ובעידוד",
+      "weakness": "ראשית הדרך בהתנסות במגוון מאכלים",
+      "cognitiveTags": []
+    },
+    {
+      "id": "st_belongings",
+      "subdomain": "organization",
+      "prompt": "שמירה על חפצים אישיים",
+      "strength": "שומר על חפציו",
+      "partial": "שומר על חפציו בתזכורת",
+      "weakness": "ראשית הדרך בשמירה על חפצים אישיים",
+      "cognitiveTags": []
     }
   ],
   "goals": [
@@ -1414,7 +1595,8 @@
         "st_write_legible",
         "st_write_page_org",
         "st_fine_tools",
-        "st_write_copy"
+        "st_write_copy",
+        "st_graphomotor"
       ],
       "title": "שיפור הכתיבה הגרפו־מוטורית והארגון במרחב הדף",
       "gradeBands": [
@@ -1477,7 +1659,9 @@
       "domain": "learner",
       "triggeredBy": [
         "st_org_materials",
-        "st_org_punctual"
+        "st_org_punctual",
+        "st_belongings",
+        "st_org_workspace"
       ],
       "title": "התארגנות עצמאית ואחריות אישית בתיווך מינימלי",
       "gradeBands": [
@@ -1611,7 +1795,9 @@
       "domain": "social_emo",
       "triggeredBy": [
         "st_soc_situations",
-        "st_soc_conflict"
+        "st_soc_conflict",
+        "st_negotiate",
+        "st_humor"
       ],
       "title": "הקשבה וראיית האחר בסיטואציה חברתית",
       "gradeBands": [
@@ -1710,7 +1896,8 @@
       "id": "goal_fine_motor",
       "domain": "motor_adl",
       "triggeredBy": [
-        "st_fine_tools"
+        "st_fine_tools",
+        "st_cutting"
       ],
       "title": "שיפור המוטוריקה העדינה והשימוש בציוד",
       "gradeBands": [
@@ -1741,7 +1928,10 @@
         "st_adl_independence",
         "st_gross_participation",
         "st_adl_mobility",
-        "st_adl_dressing"
+        "st_adl_dressing",
+        "st_hygiene",
+        "st_grooming",
+        "st_toileting"
       ],
       "title": "הרחבת העצמאות בתפקוד היומיומי",
       "gradeBands": [
@@ -1803,7 +1993,10 @@
       "triggeredBy": [
         "st_self_advocacy",
         "st_self_strengths",
-        "st_self_criticism"
+        "st_self_criticism",
+        "st_self_needs",
+        "st_self_help",
+        "st_self_express_needs"
       ],
       "title": "פיתוח סינגור עצמי ומודעות ליכולות האישיות",
       "gradeBands": [
@@ -1863,7 +2056,8 @@
       "id": "goal_instructions",
       "domain": "learner",
       "triggeredBy": [
-        "st_instructions"
+        "st_instructions",
+        "st_listen_act"
       ],
       "title": "שיפור הבנת הוראות וביצוען",
       "gradeBands": [
@@ -1893,7 +2087,8 @@
       "id": "goal_personal_space",
       "domain": "social_emo",
       "triggeredBy": [
-        "st_personal_space"
+        "st_personal_space",
+        "st_touch_boundaries"
       ],
       "title": "הכרת גבולות הגוף וכללי קרבה לאחר",
       "gradeBands": [
@@ -1927,7 +2122,8 @@
         "st_lang_relevant",
         "st_lang_questions",
         "st_lang_fluency",
-        "st_lang_intonation"
+        "st_lang_intonation",
+        "st_narrative"
       ],
       "title": "שיפור ההבעה בעל פה והרחבת אוצר המילים",
       "gradeBands": [
@@ -1968,7 +2164,8 @@
         "st_lang_register",
         "st_lang_subtext",
         "st_lang_repair",
-        "st_aac"
+        "st_aac",
+        "st_listen_other"
       ],
       "title": "ניהול שיח ותקשורת בין-אישית",
       "gradeBands": [
@@ -2037,7 +2234,9 @@
         "st_cog_sorting",
         "st_cog_main_idea",
         "st_cog_cause",
-        "st_cog_sequence"
+        "st_cog_sequence",
+        "st_memory_apply",
+        "st_problem_explore"
       ],
       "title": "פיתוח חשיבה, הסקה והכללה",
       "gradeBands": [
@@ -2163,7 +2362,9 @@
         "st_soc_belonging",
         "st_soc_reciprocity",
         "st_soc_empathy",
-        "st_soc_respond"
+        "st_soc_respond",
+        "st_helping",
+        "st_lead_follow"
       ],
       "title": "השתלבות חברתית, הדדיות ותחושת שייכות",
       "gradeBands": [
@@ -2377,178 +2578,986 @@
         "mid": "יפתור נכונה 6 מתוך 10 תרגילים בתחום הנלמד בשכבה",
         "end": "יפתור נכונה 8 מתוך 10 תרגילים, ובעיה מילולית בתחום הנלמד ב-70% מהמקרים"
       }
+    },
+    {
+      "id": "goal_motor_coordination",
+      "domain": "motor_adl",
+      "triggeredBy": [
+        "st_motor_coordination",
+        "st_balance"
+      ],
+      "title": "פיתוח תיאום מוטורי ושיווי משקל",
+      "gradeBands": [
+        "1-2",
+        "3-4"
+      ],
+      "objectives": [
+        "יבצע רצף תנועות גוף מגוונות בהדגמה ובהמשך באופן עצמאי",
+        "ישמור על שיווי משקל בפעילות תנועתית מוכרת",
+        "ישתתף במשחק תנועתי קבוצתי ויתמיד בו לאורך הפעילות"
+      ],
+      "methods": [
+        "מסלול מכשולים קבוע בחצר או בכיתה, עם הדגמה לפני הביצוע",
+        "משחקי תנועה עם רצף מוכר: קפיצה, דילוג, הליכה על קו",
+        "פעילות על משטחים לא יציבים, בליווי ובתמיכה הדרגתית",
+        "שירי תנועה וחיקוי תנועות מול מראה",
+        "שיתוף המורה לחינוך גופני או המרפאה בעיסוק בבניית הרצף"
+      ],
+      "criteria": {
+        "mid": "יבצע רצף תנועות מוכר וישמור על שיווי משקל ב-60% מהניסיונות",
+        "end": "יבצע רצף תנועות מגוון וישמור על שיווי משקל ב-80% מהניסיונות"
+      }
+    },
+    {
+      "id": "goal_eating",
+      "domain": "motor_adl",
+      "triggeredBy": [
+        "st_food_variety",
+        "st_adl_eating"
+      ],
+      "title": "הרחבת העצמאות והגיוון באכילה",
+      "gradeBands": [
+        "1-2",
+        "3-4"
+      ],
+      "objectives": [
+        "יאכל וישתה באופן עצמאי בקצב ובכמות מותאמים",
+        "יתנסה במאכל חדש אחד בכל שבוע, תחילה במגע ובריח ובהמשך בטעימה",
+        "ישמור על ניקיונו וניקיון סביבתו בזמן הארוחה"
+      ],
+      "methods": [
+        "הכנה מראש והצגת המאכל החדש לפני הארוחה, בלי דרישה לטעום",
+        "חשיפה מדורגת: מסתכל, נוגע, מריח, מלקק, טועם",
+        "ישיבה בארוחה לצד ילד שאוכל מגוון, כמודל",
+        "לוח התנסויות אישי עם סימון כל מאכל שנוסה",
+        "היוועצות עם המרפאה בעיסוק בהתנסות חושית במזון"
+      ],
+      "criteria": {
+        "mid": "יאכל באופן עצמאי ב-70% מהארוחות ויתנסה במאכל חדש אחד בשבועיים",
+        "end": "יאכל באופן עצמאי ב-90% מהארוחות ויתנסה במאכל חדש אחד בשבוע"
+      }
     }
   ],
   "trafficLightNote": "רמזור אפירמטיבי — הצוות מסמן לכל מיומנות את רמת התפקוד והעצמאות: עצמאי ומבצע בעקביות, בתהליך למידה וזקוק לתזכורת ותיווך, או ראשית הדרך ויעד מרכזי להתערבות. הניסוח כולו בשפת כוחות. מקור: רמזור אפירמטיבי לצוות — בוגרים, בהשלמה לכל תחומי הבנק.",
   "trafficLightLevels": [
-    { "v": "strength", "dot": "🟢", "label": "עצמאי ומבצע בעקביות", "help": "תואם גיל וסיטואציה" },
-    { "v": "partial", "dot": "🟡", "label": "בתהליך למידה", "help": "זקוק לתזכורת ותיווך" },
-    { "v": "weakness", "dot": "🔴", "label": "ראשית הדרך", "help": "יעד מרכזי להתערבות והרחבת המיומנות השנה" }
+    {
+      "v": "strength",
+      "dot": "🟢",
+      "label": "עצמאי ומבצע בעקביות",
+      "help": "תואם גיל וסיטואציה"
+    },
+    {
+      "v": "partial",
+      "dot": "🟡",
+      "label": "בתהליך למידה",
+      "help": "זקוק לתזכורת ותיווך"
+    },
+    {
+      "v": "weakness",
+      "dot": "🔴",
+      "label": "ראשית הדרך",
+      "help": "יעד מרכזי להתערבות והרחבת המיומנות השנה"
+    }
   ],
   "trafficLight": [
     {
+      "id": "tle_attention",
+      "stage": "early",
+      "label": "קשב ולמידה",
+      "skills": [
+        {
+          "label": "מגלה סקרנות ועניין בפעילויות למידה והתנסות",
+          "st": "st_mot_learning",
+          "core": true
+        },
+        {
+          "label": "מתמקד/ת בפעילות לאורך זמן מותאם לגיל",
+          "st": "st_att_focus",
+          "core": true
+        },
+        {
+          "label": "מקשיב/ה להוראות ופועל/ת בהתאם להן",
+          "st": "st_listen_act",
+          "core": true
+        },
+        {
+          "label": "מתמיד/ה במשימה גם כאשר היא דורשת מאמץ",
+          "st": "st_ind_task_completion",
+          "core": true
+        },
+        {
+          "label": "זוכר/ת ומיישם/ת מידע שנלמד",
+          "st": "st_memory_apply",
+          "core": true
+        },
+        {
+          "label": "מתנסה בפתרון בעיות ובחיפוש אחר דרכי פעולה",
+          "st": "st_problem_explore",
+          "core": true
+        }
+      ]
+    },
+    {
+      "id": "tle_language",
+      "stage": "early",
+      "label": "שפה ותקשורת",
+      "skills": [
+        {
+          "label": "מבין/ה הוראות ושיח המותאמים לגיל",
+          "st": "st_instructions",
+          "core": true
+        },
+        {
+          "label": "מביע/ה צרכים, רצונות, מחשבות וחוויות באופן ברור",
+          "st": "st_lang_clarity",
+          "core": true
+        },
+        {
+          "label": "מנהל/ת שיח הדדי עם ילדים ומבוגרים",
+          "st": "st_lang_turn",
+          "core": true
+        },
+        {
+          "label": "מקשיב/ה לדברי האחר ומתייחס/ת אליהם",
+          "st": "st_listen_other",
+          "core": true
+        },
+        {
+          "label": "משתמש/ת באוצר מילים מגוון ומותאם להקשר",
+          "st": "st_lang_vocab",
+          "core": true
+        },
+        {
+          "label": "מספר/ת על אירועים וחוויות ברצף הגיוני",
+          "st": "st_narrative",
+          "core": true
+        },
+        {
+          "label": "משתמש/ת באינטונציה מותאמת ובהבעות פנים מגוונות",
+          "st": "st_lang_intonation",
+          "core": true
+        },
+        {
+          "label": "מצליח/ה לנהל משא ומתן בצורה מכבדת",
+          "st": "st_negotiate",
+          "core": true
+        }
+      ]
+    },
+    {
+      "id": "tle_social",
+      "stage": "early",
+      "label": "חברתי ומערכות יחסים",
+      "skills": [
+        {
+          "label": "עונה ומגיב/ה כשפונים אליו/ה, אנשים קרובים, מוכרים או חדשים",
+          "st": "st_soc_respond",
+          "core": true
+        },
+        {
+          "label": "יוזם/ת תקשורת ופונה בעצמו/ה לילדים בני הגיל כדי לדבר או לשחק",
+          "st": "st_soc_initiate",
+          "core": true
+        },
+        {
+          "label": "משתלב/ת ומוצא/ת את המקום שלו/ה בתוך קבוצת חברים",
+          "st": "st_soc_group",
+          "core": true
+        },
+        {
+          "label": "יוצר/ת ושומר/ת על קשר חברי קרוב ומשמעותי עם חבר אחד לפחות",
+          "st": "st_soc_peer",
+          "core": true
+        },
+        {
+          "label": "מקיים/ת קשר הדדי: גם מקשיב/ה וגם משתף/ת",
+          "st": "st_soc_reciprocity",
+          "core": true
+        },
+        {
+          "label": "מתחשב/ת ברצונות וברגשות של החברים סביבו/ה",
+          "st": "st_soc_empathy",
+          "core": true
+        },
+        {
+          "label": "עוזר/ת ומושיט/ה יד לאחרים כשצריך",
+          "st": "st_helping",
+          "core": true
+        },
+        {
+          "label": "מבין/ה קודים חברתיים, את החוקים ה״לא כתובים״ של ההתנהגות",
+          "st": "st_soc_situations",
+          "core": true
+        },
+        {
+          "label": "מבין/ה ומביע/ה חוש הומור ובדיחות בצורה מותאמת",
+          "st": "st_humor",
+          "core": true
+        },
+        {
+          "label": "פותר/ת בעיות ומסתדר/ת כשיש אי הבנה או ויכוח עם חבר",
+          "st": "st_soc_conflict",
+          "core": true
+        },
+        {
+          "label": "יודע/ת להיות מנהיג וגם להיות מונהג ולאפשר לאחרים להוביל",
+          "st": "st_lead_follow",
+          "core": true
+        }
+      ]
+    },
+    {
+      "id": "tle_motor",
+      "stage": "early",
+      "label": "תפקוד מוטורי חושי",
+      "skills": [
+        {
+          "label": "מצייר/ת, מעתיק/ה ומפיק/ה תוצרים גרפומוטוריים בהתאם לגיל",
+          "st": "st_graphomotor",
+          "core": true
+        },
+        {
+          "label": "גוזר/ת, מדביק/ה ומשתמש/ת בחומרי יצירה",
+          "st": "st_cutting",
+          "core": true
+        },
+        {
+          "label": "משתמש/ת בכלי כתיבה באופן מותאם",
+          "st": "st_fine_tools",
+          "core": true
+        },
+        {
+          "label": "משתתף/ת בפעילות גופנית וריקוד בהתאם ליכולותיו/ה",
+          "st": "st_gross_participation",
+          "core": true
+        },
+        {
+          "label": "מתאם/ת תנועות גוף ומבצע/ת תנועות מגוונות",
+          "st": "st_motor_coordination",
+          "core": true
+        },
+        {
+          "label": "שומר/ת על שיווי משקל במהלך פעילות",
+          "st": "st_balance",
+          "core": true
+        }
+      ]
+    },
+    {
+      "id": "tle_emotional",
+      "stage": "early",
+      "label": "תפקוד רגשי התנהגותי",
+      "skills": [
+        {
+          "label": "מבטא/ת את הצרכים והרגשות שלו/ה בצורה החברתית המקובלת",
+          "st": "st_emo_identify",
+          "core": true
+        },
+        {
+          "label": "מווסת/ת את הרגשות שלו/ה: נרגע/ת כשמשהו מאכזב ומצליח/ה לדחות סיפוקים",
+          "st": "st_emo_regulation",
+          "core": true
+        },
+        {
+          "label": "מזהה ומבין/ה מה אנשים אחרים מרגישים לפי ההתנהגות שלהם",
+          "st": "st_disc_nonverbal",
+          "core": true
+        },
+        {
+          "label": "מסתגל/ת לשינויים ומעברים במהלך היום",
+          "st": "st_rules_transitions",
+          "core": true
+        },
+        {
+          "label": "מקבל/ת סמכות ומשתף/ת פעולה עם כללי הבית והמסגרת",
+          "st": "st_rules_authority",
+          "core": true
+        },
+        {
+          "label": "שומר/ת על מרחב אישי שלו/ה ולא נכנס/ת בצורה מוגזמת למרחב של אחרים",
+          "st": "st_personal_space",
+          "core": true
+        },
+        {
+          "label": "מגלה ביטחון ונכונות להתנסות במצבים חדשים",
+          "st": "st_emo_selfimage",
+          "core": true
+        },
+        {
+          "label": "נוגע/ת באופן מותאם בילדים אחרים",
+          "st": "st_touch_boundaries",
+          "core": true
+        }
+      ]
+    },
+    {
+      "id": "tle_independence",
+      "stage": "early",
+      "label": "עצמאות והתארגנות",
+      "skills": [
+        {
+          "label": "מתארגן/ת לקראת פעילות ובמהלכה",
+          "st": "st_org_materials",
+          "core": true
+        },
+        {
+          "label": "מבצע/ת משימות יומיומיות באופן עצמאי ובהתאם לגיל",
+          "st": "st_adl_independence",
+          "core": true
+        },
+        {
+          "label": "מקפיד/ה על היגיינה אישית בסיסית",
+          "st": "st_hygiene",
+          "core": true
+        },
+        {
+          "label": "לרוב נקי/ה, מסודר/ת ומטופח/ת",
+          "st": "st_grooming",
+          "core": true
+        },
+        {
+          "label": "משתמש/ת בשירותים באופן עצמאי בהתאם לצורך",
+          "st": "st_toileting",
+          "core": true
+        },
+        {
+          "label": "אוכל/ת ושותה באופן עצמאי",
+          "st": "st_adl_eating",
+          "core": true
+        },
+        {
+          "label": "מתנסה במגוון מאכלים",
+          "st": "st_food_variety",
+          "core": true
+        },
+        {
+          "label": "מצליח/ה להתלבש בהתאם לגיל: מעיל, נעליים",
+          "st": "st_adl_dressing",
+          "core": true
+        },
+        {
+          "label": "שומר/ת על חפציו/ה",
+          "st": "st_belongings",
+          "core": true
+        },
+        {
+          "label": "מארגן/ת את סביבת הפעילות",
+          "st": "st_org_workspace",
+          "core": true
+        }
+      ]
+    },
+    {
       "id": "tl_social",
+      "stage": "mid",
       "label": "כישורים חברתיים וקשרים בין-אישיים",
       "skills": [
-        { "label": "משתלב בהצלחה בקבוצות חברתיות משתנות ופעילויות שונות", "st": "st_soc_group", "core": true },
-        { "label": "מגלה גמישות חברתית ומחשבתית במהלך פעילות משותפת", "st": "st_soc_flex" },
-        { "label": "מביע תחושת שייכות ומוצא את מקומו בתוך קבוצת השווים", "st": "st_soc_belonging" },
-        { "label": "מקיים קשרים משמעותיים וקרובים עם בני גילו (חבר אחד לפחות)", "st": "st_soc_peer", "core": true },
-        { "label": "מגלה הדדיות בקשר מתוך ראייה, קשב והתחשבות בצרכי האחר", "st": "st_soc_reciprocity" },
-        { "label": "בוחר ומנהל את זמן ההפסקה באופן מותאם ומספק", "st": "st_soc_recess" },
-        { "label": "מגלה אמפתיה ומבין לליבם של חבריו", "st": "st_soc_empathy" },
-        { "label": "מגיב ונענה בצורה מותאמת לפנייה וליוזמה חברתית מצד אחרים", "st": "st_soc_respond" },
-        { "label": "נוקט יוזמה חברתית ופונה בעצמו לבני גילו", "st": "st_soc_initiate", "core": true },
-        { "label": "מבין קודים חברתיים מורכבים (הומור, ציניות, הבעות פנים, שמירת סוד)", "st": "st_soc_situations", "core": true },
-        { "label": "פותר בעיות חברתיות ואי-הבנות בצורה שקולה ומקדמת", "st": "st_soc_conflict" },
-        { "label": "מגלה סובלנות ונימוסי שיח כלפי תלמידים ואנשי צוות", "st": "st_soc_tolerance", "core": true },
-        { "label": "מתמודד בצורה חיובית עם הפסד או תסכול במשחק ובלמידה", "st": "st_soc_loss" },
-        { "label": "מקיים קשר תקין ומכבד עם אנשי הצוות החינוכי", "st": "st_soc_staff" },
-        { "label": "משתף פעולה ותורם את חלקו בעבודה קבוצתית", "st": "st_ind_peer_learning" }
+        {
+          "label": "משתלב בהצלחה בקבוצות חברתיות משתנות ופעילויות שונות",
+          "st": "st_soc_group",
+          "core": true
+        },
+        {
+          "label": "מגלה גמישות חברתית ומחשבתית במהלך פעילות משותפת",
+          "st": "st_soc_flex"
+        },
+        {
+          "label": "מביע תחושת שייכות ומוצא את מקומו בתוך קבוצת השווים",
+          "st": "st_soc_belonging"
+        },
+        {
+          "label": "מקיים קשרים משמעותיים וקרובים עם בני גילו (חבר אחד לפחות)",
+          "st": "st_soc_peer",
+          "core": true
+        },
+        {
+          "label": "מגלה הדדיות בקשר מתוך ראייה, קשב והתחשבות בצרכי האחר",
+          "st": "st_soc_reciprocity"
+        },
+        {
+          "label": "בוחר ומנהל את זמן ההפסקה באופן מותאם ומספק",
+          "st": "st_soc_recess"
+        },
+        {
+          "label": "מגלה אמפתיה ומבין לליבם של חבריו",
+          "st": "st_soc_empathy"
+        },
+        {
+          "label": "מגיב ונענה בצורה מותאמת לפנייה וליוזמה חברתית מצד אחרים",
+          "st": "st_soc_respond"
+        },
+        {
+          "label": "נוקט יוזמה חברתית ופונה בעצמו לבני גילו",
+          "st": "st_soc_initiate",
+          "core": true
+        },
+        {
+          "label": "מבין קודים חברתיים מורכבים (הומור, ציניות, הבעות פנים, שמירת סוד)",
+          "st": "st_soc_situations",
+          "core": true
+        },
+        {
+          "label": "פותר בעיות חברתיות ואי-הבנות בצורה שקולה ומקדמת",
+          "st": "st_soc_conflict"
+        },
+        {
+          "label": "מגלה סובלנות ונימוסי שיח כלפי תלמידים ואנשי צוות",
+          "st": "st_soc_tolerance",
+          "core": true
+        },
+        {
+          "label": "מתמודד בצורה חיובית עם הפסד או תסכול במשחק ובלמידה",
+          "st": "st_soc_loss"
+        },
+        {
+          "label": "מקיים קשר תקין ומכבד עם אנשי הצוות החינוכי",
+          "st": "st_soc_staff"
+        },
+        {
+          "label": "משתף פעולה ותורם את חלקו בעבודה קבוצתית",
+          "st": "st_ind_peer_learning"
+        }
       ]
     },
     {
       "id": "tl_learning",
+      "stage": "mid",
       "label": "למידה ואסטרטגיות למידה",
       "skills": [
-        { "label": "הבנת הנקרא", "section": true },
-        { "label": "קורא במדויק ובשטף טקסט תואם רמה", "st": "st_read_fluency", "core": true },
-        { "label": "קורא תוך התייחסות לסימני הפיסוק ובהנגנה מותאמת", "st": "st_read_punctuation" },
-        { "label": "מפענח מילים חדשות ולא מוכרות", "st": "st_read_accuracy" },
-        { "label": "מפיק משמעות מטקסט — משחזר ומסכם את הנקרא בעל פה או בכתב", "st": "st_comp_retell", "core": true },
-        { "label": "מאתר פרטים גלויים בטקסט הנלמד", "st": "st_comp_details" },
-        { "label": "מסיק מסקנות ומקשר בין רעיונות בטקסט", "st": "st_comp_inference" },
-        { "label": "מזהה את הרעיון המרכזי של הטקסט", "st": "st_comp_main_idea" },
-        { "label": "מפרש מילים קשות מתוך ההקשר ובעזרת מילון", "st": "st_comp_vocab" },
-        { "label": "מפעיל תהליכי בקרה להבנת הטקסט — עוצר, בודק וחוזר", "st": "st_comp_monitoring" },
-        { "label": "ממזג מידע ממספר טקסטים או מקורות שונים", "st": "st_comp_synthesis" },
-        { "label": "הבעה בכתב", "section": true },
-        { "label": "עונה בצורה ממוקדת על שאלות תוך הבחנה בין עיקר לטפל", "st": "st_cog_main_idea" },
-        { "label": "כותב תשובה מלאה, מאורגנת ומנוסחת כהלכה", "st": "st_write_message", "core": true },
-        { "label": "כותב בכתיב תקין", "st": "st_write_spelling" },
-        { "label": "כותב תוך הקפדה על כללי התחביר ועל מבנה משפט תקין", "st": "st_write_syntax" },
-        { "label": "מביע את עצמו בכתיבה חופשית (חיבור, הבעת עמדה)", "st": "st_write_free" },
-        { "label": "שומר על כתב יד ברור, קריא ומאורגן", "st": "st_write_legible", "core": true },
-        { "label": "מתארגן במרחב הדף — שוליים, רווחים וכיווניות", "st": "st_write_page_org" },
-        { "label": "מעתיק מהלוח מילה שלמה ובקצב הכיתה", "st": "st_write_copy" },
-        { "label": "כותב במעבד תמלילים באופן עצמאי", "st": "st_write_wordprocessor" },
-        { "label": "אוריינות טכנולוגית", "section": true },
-        { "label": "מפגין אוריינות טכנולוגית (יכולות הקלדה, חיפוש מידע ברשת)", "st": "st_digital_literacy", "core": true },
-        { "label": "משתמש ביעילות ביישומים לימודיים ובכלים דיגיטליים", "st": "st_digital_tools" },
-        { "label": "אסטרטגיות למידה וקשב בכיתה", "section": true },
-        { "label": "משתמש באסטרטגיות למידה — סיכום, הדגשה, מיפוי", "st": "st_learn_strategies", "core": true },
-        { "label": "מפעיל יכולת בקרה על תוצרי הלמידה שלו והערכה עצמית", "st": "st_cog_control" },
-        { "label": "נעזר בכרטיסי ניווט ובעזרי למידה מותאמים", "st": "st_learn_aids" },
-        { "label": "שומר על קשב וריכוז לאורך המשימה", "st": "st_att_focus", "core": true },
-        { "label": "קשוב ומתפקד בחלקים הפרונטליים של השיעור", "st": "st_att_frontal" },
-        { "label": "מבין ומבצע הוראה רב-שלבית באופן עצמאי", "st": "st_instructions", "core": true },
-        { "label": "משתתף באופן אקטיבי במהלך השיעורים (שואל, עונה, מגיב)", "st": "st_mot_participation" },
-        { "label": "מתכונן ולומד למבחנים ולמשימות הערכה בצורה מובנית", "st": "st_mot_exams" },
-        { "label": "מכין שיעורי בית ומשימות הגשה בקביעות", "st": "st_mot_homework" },
-        { "label": "מגלה מוטיבציה פנימית ללמידה ומעורבות בתכנים", "st": "st_mot_learning" },
-        { "label": "מתמטיקה", "section": true },
-        { "label": "מפגין הבנה וחשיבה מתמטית התואמת את דרישות הגיל והשכבה", "st": "st_math_general", "core": true },
-        { "label": "מונה וסופר בתחום הנלמד", "st": "st_math_counting" },
-        { "label": "מזהה את ערך הספרה במבנה העשרוני", "st": "st_math_place_value", "core": true },
-        { "label": "משווה בין מספרים ומשתמש בסימני השוויון והאי-שוויון", "st": "st_math_compare" },
-        { "label": "פותר תרגילי חיבור וחיסור בתחום הנלמד", "st": "st_math_addsub", "core": true },
-        { "label": "מחבר ומחסר במאונך עם המרה ופריטה", "st": "st_math_regrouping" },
-        { "label": "פותר בעיות מילוליות ומזהה את הפעולה הנדרשת", "st": "st_math_word_problems" },
-        { "label": "מזהה צורות, ממיין מצולעים ומודד ביחידות מוסכמות", "st": "st_math_geometry", "core": true }
+        {
+          "label": "הבנת הנקרא",
+          "section": true
+        },
+        {
+          "label": "קורא במדויק ובשטף טקסט תואם רמה",
+          "st": "st_read_fluency",
+          "core": true
+        },
+        {
+          "label": "קורא תוך התייחסות לסימני הפיסוק ובהנגנה מותאמת",
+          "st": "st_read_punctuation"
+        },
+        {
+          "label": "מפענח מילים חדשות ולא מוכרות",
+          "st": "st_read_accuracy"
+        },
+        {
+          "label": "מפיק משמעות מטקסט — משחזר ומסכם את הנקרא בעל פה או בכתב",
+          "st": "st_comp_retell",
+          "core": true
+        },
+        {
+          "label": "מאתר פרטים גלויים בטקסט הנלמד",
+          "st": "st_comp_details"
+        },
+        {
+          "label": "מסיק מסקנות ומקשר בין רעיונות בטקסט",
+          "st": "st_comp_inference"
+        },
+        {
+          "label": "מזהה את הרעיון המרכזי של הטקסט",
+          "st": "st_comp_main_idea"
+        },
+        {
+          "label": "מפרש מילים קשות מתוך ההקשר ובעזרת מילון",
+          "st": "st_comp_vocab"
+        },
+        {
+          "label": "מפעיל תהליכי בקרה להבנת הטקסט — עוצר, בודק וחוזר",
+          "st": "st_comp_monitoring"
+        },
+        {
+          "label": "ממזג מידע ממספר טקסטים או מקורות שונים",
+          "st": "st_comp_synthesis"
+        },
+        {
+          "label": "הבעה בכתב",
+          "section": true
+        },
+        {
+          "label": "עונה בצורה ממוקדת על שאלות תוך הבחנה בין עיקר לטפל",
+          "st": "st_cog_main_idea"
+        },
+        {
+          "label": "כותב תשובה מלאה, מאורגנת ומנוסחת כהלכה",
+          "st": "st_write_message",
+          "core": true
+        },
+        {
+          "label": "כותב בכתיב תקין",
+          "st": "st_write_spelling"
+        },
+        {
+          "label": "כותב תוך הקפדה על כללי התחביר ועל מבנה משפט תקין",
+          "st": "st_write_syntax"
+        },
+        {
+          "label": "מביע את עצמו בכתיבה חופשית (חיבור, הבעת עמדה)",
+          "st": "st_write_free"
+        },
+        {
+          "label": "שומר על כתב יד ברור, קריא ומאורגן",
+          "st": "st_write_legible",
+          "core": true
+        },
+        {
+          "label": "מתארגן במרחב הדף — שוליים, רווחים וכיווניות",
+          "st": "st_write_page_org"
+        },
+        {
+          "label": "מעתיק מהלוח מילה שלמה ובקצב הכיתה",
+          "st": "st_write_copy"
+        },
+        {
+          "label": "כותב במעבד תמלילים באופן עצמאי",
+          "st": "st_write_wordprocessor"
+        },
+        {
+          "label": "אוריינות טכנולוגית",
+          "section": true
+        },
+        {
+          "label": "מפגין אוריינות טכנולוגית (יכולות הקלדה, חיפוש מידע ברשת)",
+          "st": "st_digital_literacy",
+          "core": true
+        },
+        {
+          "label": "משתמש ביעילות ביישומים לימודיים ובכלים דיגיטליים",
+          "st": "st_digital_tools"
+        },
+        {
+          "label": "אסטרטגיות למידה וקשב בכיתה",
+          "section": true
+        },
+        {
+          "label": "משתמש באסטרטגיות למידה — סיכום, הדגשה, מיפוי",
+          "st": "st_learn_strategies",
+          "core": true
+        },
+        {
+          "label": "מפעיל יכולת בקרה על תוצרי הלמידה שלו והערכה עצמית",
+          "st": "st_cog_control"
+        },
+        {
+          "label": "נעזר בכרטיסי ניווט ובעזרי למידה מותאמים",
+          "st": "st_learn_aids"
+        },
+        {
+          "label": "שומר על קשב וריכוז לאורך המשימה",
+          "st": "st_att_focus",
+          "core": true
+        },
+        {
+          "label": "קשוב ומתפקד בחלקים הפרונטליים של השיעור",
+          "st": "st_att_frontal"
+        },
+        {
+          "label": "מבין ומבצע הוראה רב-שלבית באופן עצמאי",
+          "st": "st_instructions",
+          "core": true
+        },
+        {
+          "label": "משתתף באופן אקטיבי במהלך השיעורים (שואל, עונה, מגיב)",
+          "st": "st_mot_participation"
+        },
+        {
+          "label": "מתכונן ולומד למבחנים ולמשימות הערכה בצורה מובנית",
+          "st": "st_mot_exams"
+        },
+        {
+          "label": "מכין שיעורי בית ומשימות הגשה בקביעות",
+          "st": "st_mot_homework"
+        },
+        {
+          "label": "מגלה מוטיבציה פנימית ללמידה ומעורבות בתכנים",
+          "st": "st_mot_learning"
+        },
+        {
+          "label": "מתמטיקה",
+          "section": true
+        },
+        {
+          "label": "מפגין הבנה וחשיבה מתמטית התואמת את דרישות הגיל והשכבה",
+          "st": "st_math_general",
+          "core": true
+        },
+        {
+          "label": "מונה וסופר בתחום הנלמד",
+          "st": "st_math_counting"
+        },
+        {
+          "label": "מזהה את ערך הספרה במבנה העשרוני",
+          "st": "st_math_place_value",
+          "core": true
+        },
+        {
+          "label": "משווה בין מספרים ומשתמש בסימני השוויון והאי-שוויון",
+          "st": "st_math_compare"
+        },
+        {
+          "label": "פותר תרגילי חיבור וחיסור בתחום הנלמד",
+          "st": "st_math_addsub",
+          "core": true
+        },
+        {
+          "label": "מחבר ומחסר במאונך עם המרה ופריטה",
+          "st": "st_math_regrouping"
+        },
+        {
+          "label": "פותר בעיות מילוליות ומזהה את הפעולה הנדרשת",
+          "st": "st_math_word_problems"
+        },
+        {
+          "label": "מזהה צורות, ממיין מצולעים ומודד ביחידות מוסכמות",
+          "st": "st_math_geometry",
+          "core": true
+        }
       ]
     },
     {
       "id": "tl_organization",
+      "stage": "mid",
       "label": "ארגון, עצמאות ותפקודים ניהוליים",
       "skills": [
-        { "label": "מתארגן ביעילות לשיעור (הוצאה, הכנסה וסידור של הציוד הנדרש)", "st": "st_org_materials", "core": true },
-        { "label": "שומר על סדר וארגון בסביבת העבודה שלו (השולחן, התיק, המחברות)", "st": "st_org_workspace" },
-        { "label": "מגיע בזמן ומקיים ביקור סדיר", "st": "st_org_punctual" },
-        { "label": "עובד בצורה עצמאית ומקדם משימות ללא תלות קבועה בתיווך", "st": "st_ind_autonomy", "core": true },
-        { "label": "מתחיל ומסיים מטלות בתוך הזמן שהוקצב", "st": "st_ind_task_completion" },
-        { "label": "מתכנן, מארגן ומבצע משימה מרובת שלבים", "st": "st_cog_executive", "core": true },
-        { "label": "מנהל את הזמן ועומד בלוחות זמנים (תיעדוף משימות, הגשה בזמן)", "st": "st_cog_time" },
-        { "label": "מגלה יכולת בחירה עצמאית בין חלופות או משימות", "st": "st_self_choice" },
-        { "label": "ממיין, מכליל ומארגן מידע לפי קריטריון", "st": "st_cog_sorting" },
-        { "label": "מסיק מסקנות ומקשר בין נתונים", "st": "st_cog_inference", "core": true },
-        { "label": "מבין ומסביר יחסי סיבה ותוצאה", "st": "st_cog_cause" },
-        { "label": "מבין רצף של תהליך ומסדר אותו", "st": "st_cog_sequence" }
+        {
+          "label": "מתארגן ביעילות לשיעור (הוצאה, הכנסה וסידור של הציוד הנדרש)",
+          "st": "st_org_materials",
+          "core": true
+        },
+        {
+          "label": "שומר על סדר וארגון בסביבת העבודה שלו (השולחן, התיק, המחברות)",
+          "st": "st_org_workspace"
+        },
+        {
+          "label": "מגיע בזמן ומקיים ביקור סדיר",
+          "st": "st_org_punctual"
+        },
+        {
+          "label": "עובד בצורה עצמאית ומקדם משימות ללא תלות קבועה בתיווך",
+          "st": "st_ind_autonomy",
+          "core": true
+        },
+        {
+          "label": "מתחיל ומסיים מטלות בתוך הזמן שהוקצב",
+          "st": "st_ind_task_completion"
+        },
+        {
+          "label": "מתכנן, מארגן ומבצע משימה מרובת שלבים",
+          "st": "st_cog_executive",
+          "core": true
+        },
+        {
+          "label": "מנהל את הזמן ועומד בלוחות זמנים (תיעדוף משימות, הגשה בזמן)",
+          "st": "st_cog_time"
+        },
+        {
+          "label": "מגלה יכולת בחירה עצמאית בין חלופות או משימות",
+          "st": "st_self_choice"
+        },
+        {
+          "label": "ממיין, מכליל ומארגן מידע לפי קריטריון",
+          "st": "st_cog_sorting"
+        },
+        {
+          "label": "מסיק מסקנות ומקשר בין נתונים",
+          "st": "st_cog_inference",
+          "core": true
+        },
+        {
+          "label": "מבין ומסביר יחסי סיבה ותוצאה",
+          "st": "st_cog_cause"
+        },
+        {
+          "label": "מבין רצף של תהליך ומסדר אותו",
+          "st": "st_cog_sequence"
+        }
       ]
     },
     {
       "id": "tl_regulation",
+      "stage": "mid",
       "label": "ויסות עצמי ורגשות",
       "skills": [
-        { "label": "לרוב מפגין מצב רוח כללי חיובי ופניות רגשית בבית הספר", "st": "st_emo_mood" },
-        { "label": "שומר על איזון רגשי ומצבי רוח יציבים לאורך יום הלימודים", "st": "st_emo_regulation" },
-        { "label": "שומר על כללי ההתנהגות והנורמות המצופות במסגרת", "st": "st_rules_norms", "core": true },
-        { "label": "פועל מתוך שיקול דעת (מצליח להמתין, לעצור ולחשוב לפני מעשה)", "st": "st_cog_inhibition" },
-        { "label": "מגלה דחיית סיפוקים וממתין לתורו בסבלנות", "st": "st_delay_gratification", "core": true },
-        { "label": "שומר על מרחק פיזי נכון ועל גבולות אישיים מול האחר", "st": "st_personal_space", "core": true },
-        { "label": "משתף פעולה עם סמכות הצוות החינוכי והטיפולי", "st": "st_rules_authority" },
-        { "label": "נשאר בכיתה ויוצא ברשות", "st": "st_rules_leaving" },
-        { "label": "מתמודד עם שינויים בהצלחה ומפגין מעבר חלק בין פעילויות, שיעורים והפסקות", "st": "st_rules_transitions" },
-        { "label": "מזהה, מבין ומביע רגשות בסיסיים ומורכבים של עצמו", "st": "st_emo_identify", "core": true },
-        { "label": "מזהה סימני עומס רגשי או תחושתי אצל עצמו", "st": "st_emo_load" },
-        { "label": "משתמש באסטרטגיות הרגעה עצמיות שנלמדו בעת הצורך", "st": "st_emo_calming" },
-        { "label": "מתאושש במהירות מאכזבה או מחוויית אי-הצלחה", "st": "st_emo_frustration", "core": true },
-        { "label": "מגלה גמישות ורוגע במצבים של חוסר ודאות", "st": "st_emo_uncertainty", "core": true },
-        { "label": "מגלה רגישות מותאמת לסביבה ולאחר", "st": "st_emo_sensitivity" }
+        {
+          "label": "לרוב מפגין מצב רוח כללי חיובי ופניות רגשית בבית הספר",
+          "st": "st_emo_mood"
+        },
+        {
+          "label": "שומר על איזון רגשי ומצבי רוח יציבים לאורך יום הלימודים",
+          "st": "st_emo_regulation"
+        },
+        {
+          "label": "שומר על כללי ההתנהגות והנורמות המצופות במסגרת",
+          "st": "st_rules_norms",
+          "core": true
+        },
+        {
+          "label": "פועל מתוך שיקול דעת (מצליח להמתין, לעצור ולחשוב לפני מעשה)",
+          "st": "st_cog_inhibition"
+        },
+        {
+          "label": "מגלה דחיית סיפוקים וממתין לתורו בסבלנות",
+          "st": "st_delay_gratification",
+          "core": true
+        },
+        {
+          "label": "שומר על מרחק פיזי נכון ועל גבולות אישיים מול האחר",
+          "st": "st_personal_space",
+          "core": true
+        },
+        {
+          "label": "משתף פעולה עם סמכות הצוות החינוכי והטיפולי",
+          "st": "st_rules_authority"
+        },
+        {
+          "label": "נשאר בכיתה ויוצא ברשות",
+          "st": "st_rules_leaving"
+        },
+        {
+          "label": "מתמודד עם שינויים בהצלחה ומפגין מעבר חלק בין פעילויות, שיעורים והפסקות",
+          "st": "st_rules_transitions"
+        },
+        {
+          "label": "מזהה, מבין ומביע רגשות בסיסיים ומורכבים של עצמו",
+          "st": "st_emo_identify",
+          "core": true
+        },
+        {
+          "label": "מזהה סימני עומס רגשי או תחושתי אצל עצמו",
+          "st": "st_emo_load"
+        },
+        {
+          "label": "משתמש באסטרטגיות הרגעה עצמיות שנלמדו בעת הצורך",
+          "st": "st_emo_calming"
+        },
+        {
+          "label": "מתאושש במהירות מאכזבה או מחוויית אי-הצלחה",
+          "st": "st_emo_frustration",
+          "core": true
+        },
+        {
+          "label": "מגלה גמישות ורוגע במצבים של חוסר ודאות",
+          "st": "st_emo_uncertainty",
+          "core": true
+        },
+        {
+          "label": "מגלה רגישות מותאמת לסביבה ולאחר",
+          "st": "st_emo_sensitivity"
+        }
       ]
     },
     {
       "id": "tl_self",
+      "stage": "mid",
       "label": "מודעות עצמית, סנגור עצמי וכישורי חיים",
       "skills": [
-        { "label": "שומר על היגיינה אישית ומראה חיצוני מסודר ומותאם", "st": "st_adl_independence", "core": true },
-        { "label": "שומר על הפרטיות שלו ושל אחרים במרחב", "st": "st_privacy" },
-        { "label": "מסנגר על עצמו (אסרטיביות): מייצג את רצונותיו וצרכיו בצורה מכבדת", "st": "st_self_advocacy", "core": true },
-        { "label": "מזהה ומציין את נקודות החוזק והיכולות הבולטות שלו", "st": "st_self_strengths", "core": true },
-        { "label": "בעל דימוי עצמי חיובי ותחושת מסוגלות", "st": "st_emo_selfimage" },
-        { "label": "מזהה את התחומים שבהם זקוק לסיוע או תיווך", "st": "st_self_needs" },
-        { "label": "מבקש עזרה באופן עצמאי ומותאם מהצוות או מחברים", "st": "st_self_help" },
-        { "label": "יודע להסביר במילים את הצרכים הפיזיים או הרגשיים שלו", "st": "st_self_express_needs" },
-        { "label": "משתמש בהתאמות הלימודיות שלו באופן עצמאי ויעיל", "st": "st_self_accommodations" },
-        { "label": "מקבל ביקורת באופן ההולם את הסיטואציה", "st": "st_self_criticism" },
-        { "label": "מזהה מצבי סיכון (במרחב הפיזי או הדיגיטלי) ופועל להתרחקות או לדיווח", "st": "st_safety_risk", "core": true },
-        { "label": "מתמודד בצורה מוגנת ומותאמת עם לחץ חברתי", "st": "st_safety_pressure" },
-        { "label": "משתמש במדיה חברתית וברשתות באופן מותאם, מוגן ומכבד", "st": "st_digital_social" }
+        {
+          "label": "שומר על היגיינה אישית ומראה חיצוני מסודר ומותאם",
+          "st": "st_adl_independence",
+          "core": true
+        },
+        {
+          "label": "שומר על הפרטיות שלו ושל אחרים במרחב",
+          "st": "st_privacy"
+        },
+        {
+          "label": "מסנגר על עצמו (אסרטיביות): מייצג את רצונותיו וצרכיו בצורה מכבדת",
+          "st": "st_self_advocacy",
+          "core": true
+        },
+        {
+          "label": "מזהה ומציין את נקודות החוזק והיכולות הבולטות שלו",
+          "st": "st_self_strengths",
+          "core": true
+        },
+        {
+          "label": "בעל דימוי עצמי חיובי ותחושת מסוגלות",
+          "st": "st_emo_selfimage"
+        },
+        {
+          "label": "מזהה את התחומים שבהם זקוק לסיוע או תיווך",
+          "st": "st_self_needs"
+        },
+        {
+          "label": "מבקש עזרה באופן עצמאי ומותאם מהצוות או מחברים",
+          "st": "st_self_help"
+        },
+        {
+          "label": "יודע להסביר במילים את הצרכים הפיזיים או הרגשיים שלו",
+          "st": "st_self_express_needs"
+        },
+        {
+          "label": "משתמש בהתאמות הלימודיות שלו באופן עצמאי ויעיל",
+          "st": "st_self_accommodations"
+        },
+        {
+          "label": "מקבל ביקורת באופן ההולם את הסיטואציה",
+          "st": "st_self_criticism"
+        },
+        {
+          "label": "מזהה מצבי סיכון (במרחב הפיזי או הדיגיטלי) ופועל להתרחקות או לדיווח",
+          "st": "st_safety_risk",
+          "core": true
+        },
+        {
+          "label": "מתמודד בצורה מוגנת ומותאמת עם לחץ חברתי",
+          "st": "st_safety_pressure"
+        },
+        {
+          "label": "משתמש במדיה חברתית וברשתות באופן מותאם, מוגן ומכבד",
+          "st": "st_digital_social"
+        }
       ]
     },
     {
       "id": "tl_communication",
+      "stage": "mid",
       "label": "תקשורת, שפה ומיומנויות שיח",
       "skills": [
-        { "label": "מתמיד בשיחה ומנהל תורות שיח לאורך זמן", "st": "st_lang_turn", "core": true },
-        { "label": "מצטרף לשיחה קיימת או לשיח קבוצתי באופן מותאם", "st": "st_disc_join", "core": true },
-        { "label": "פותח שיחה בצורה מותאמת ויוזם קשר מילולי", "st": "st_disc_open" },
-        { "label": "שומר על רצף הנושא המדובר לאורך השיחה", "st": "st_disc_topic" },
-        { "label": "מסיים שיחה בצורה חלקה ומותאמת סיטואציה", "st": "st_disc_close" },
-        { "label": "מנהל שיח ענייני המותאם לגילו ולנסיבות", "st": "st_lang_focus" },
-        { "label": "משתמש באוצר מילים עשיר, מגוון ומותאם להקשר", "st": "st_lang_vocab", "core": true },
-        { "label": "מתאים את סגנון הדיבור והשפה לשותפי שיח שונים (מורה לעומת חבר)", "st": "st_lang_register" },
-        { "label": "משתמש באינטונציה וטון דיבור מותאמים לתוכן ולסביבה", "st": "st_lang_intonation" },
-        { "label": "מדבר בשטף ובקצב מותאם", "st": "st_lang_fluency" },
-        { "label": "הגייתו ברורה ומובנת", "st": "st_lang_articulation" },
-        { "label": "מבטא את עצמו בצורה ברורה, מובנת ומפורשת לסביבה", "st": "st_lang_clarity", "core": true },
-        { "label": "משיב תשובה רלוונטית לשאלה שנשאלה", "st": "st_lang_relevant" },
-        { "label": "שואל שאלות רלוונטיות ביוזמתו", "st": "st_lang_questions" },
-        { "label": "מבין סאב-טקסט ומסרים מרומזים או עקיפים בשיחה", "st": "st_lang_subtext" },
-        { "label": "משתמש ומבין שפה לא מילולית (מחוות גוף, הנהון, תגובות תומכות שיח)", "st": "st_disc_nonverbal" },
-        { "label": "מצליח להסביר את עצמו בדרכים מגוונות ושונות אם לא הובן", "st": "st_lang_repair" },
-        { "label": "משתמש באמצעי עזר או בתקשורת תומכת וחלופית (תת״ח) במידת הצורך", "st": "st_aac" }
+        {
+          "label": "מתמיד בשיחה ומנהל תורות שיח לאורך זמן",
+          "st": "st_lang_turn",
+          "core": true
+        },
+        {
+          "label": "מצטרף לשיחה קיימת או לשיח קבוצתי באופן מותאם",
+          "st": "st_disc_join",
+          "core": true
+        },
+        {
+          "label": "פותח שיחה בצורה מותאמת ויוזם קשר מילולי",
+          "st": "st_disc_open"
+        },
+        {
+          "label": "שומר על רצף הנושא המדובר לאורך השיחה",
+          "st": "st_disc_topic"
+        },
+        {
+          "label": "מסיים שיחה בצורה חלקה ומותאמת סיטואציה",
+          "st": "st_disc_close"
+        },
+        {
+          "label": "מנהל שיח ענייני המותאם לגילו ולנסיבות",
+          "st": "st_lang_focus"
+        },
+        {
+          "label": "משתמש באוצר מילים עשיר, מגוון ומותאם להקשר",
+          "st": "st_lang_vocab",
+          "core": true
+        },
+        {
+          "label": "מתאים את סגנון הדיבור והשפה לשותפי שיח שונים (מורה לעומת חבר)",
+          "st": "st_lang_register"
+        },
+        {
+          "label": "משתמש באינטונציה וטון דיבור מותאמים לתוכן ולסביבה",
+          "st": "st_lang_intonation"
+        },
+        {
+          "label": "מדבר בשטף ובקצב מותאם",
+          "st": "st_lang_fluency"
+        },
+        {
+          "label": "הגייתו ברורה ומובנת",
+          "st": "st_lang_articulation"
+        },
+        {
+          "label": "מבטא את עצמו בצורה ברורה, מובנת ומפורשת לסביבה",
+          "st": "st_lang_clarity",
+          "core": true
+        },
+        {
+          "label": "משיב תשובה רלוונטית לשאלה שנשאלה",
+          "st": "st_lang_relevant"
+        },
+        {
+          "label": "שואל שאלות רלוונטיות ביוזמתו",
+          "st": "st_lang_questions"
+        },
+        {
+          "label": "מבין סאב-טקסט ומסרים מרומזים או עקיפים בשיחה",
+          "st": "st_lang_subtext"
+        },
+        {
+          "label": "משתמש ומבין שפה לא מילולית (מחוות גוף, הנהון, תגובות תומכות שיח)",
+          "st": "st_disc_nonverbal"
+        },
+        {
+          "label": "מצליח להסביר את עצמו בדרכים מגוונות ושונות אם לא הובן",
+          "st": "st_lang_repair"
+        },
+        {
+          "label": "משתמש באמצעי עזר או בתקשורת תומכת וחלופית (תת״ח) במידת הצורך",
+          "st": "st_aac"
+        }
       ]
     },
     {
       "id": "tl_motor",
+      "stage": "mid",
       "label": "מוטוריקה, ניידות ותפקוד יומיומי",
       "skills": [
-        { "label": "משתמש בכלי כתיבה ובציוד באחיזה ובאופן מותאם", "st": "st_fine_tools", "core": true },
-        { "label": "משתתף בפעילות תנועתית בשיעור החינוך הגופני ובהפסקה", "st": "st_gross_participation", "core": true },
-        { "label": "אוכל בקצב ובכמות מותאמים ושומר על ניקיונו וניקיון סביבתו", "st": "st_adl_eating" },
-        { "label": "מתמצא ומתנייד באופן עצמאי במרחב בית הספר", "st": "st_adl_mobility" },
-        { "label": "מתארגן באופן עצמאי בלבוש ובציוד האישי שלו", "st": "st_adl_dressing" }
+        {
+          "label": "משתמש בכלי כתיבה ובציוד באחיזה ובאופן מותאם",
+          "st": "st_fine_tools",
+          "core": true
+        },
+        {
+          "label": "משתתף בפעילות תנועתית בשיעור החינוך הגופני ובהפסקה",
+          "st": "st_gross_participation",
+          "core": true
+        },
+        {
+          "label": "אוכל בקצב ובכמות מותאמים ושומר על ניקיונו וניקיון סביבתו",
+          "st": "st_adl_eating"
+        },
+        {
+          "label": "מתמצא ומתנייד באופן עצמאי במרחב בית הספר",
+          "st": "st_adl_mobility"
+        },
+        {
+          "label": "מתארגן באופן עצמאי בלבוש ובציוד האישי שלו",
+          "st": "st_adl_dressing"
+        }
       ]
+    }
+  ],
+  "stages": [
+    {
+      "v": "early",
+      "label": "גן ויסודי א-ב",
+      "sub": "מחוון תפקודי לגיל הרך",
+      "grades": [
+        "גן",
+        "א׳",
+        "ב׳"
+      ],
+      "band": "1-2"
+    },
+    {
+      "v": "mid",
+      "label": "יסודי וחט״ב ג-ט",
+      "sub": "רמזור אפירמטיבי לצוות",
+      "grades": [
+        "ג׳",
+        "ד׳",
+        "ה׳",
+        "ו׳",
+        "ז׳",
+        "ח׳",
+        "ט׳"
+      ]
+    },
+    {
+      "v": "high",
+      "label": "תיכון",
+      "sub": "בהכנה, עדיין לא פעיל",
+      "grades": [
+        "י׳",
+        "י״א",
+        "י״ב"
+      ],
+      "soon": true
     }
   ]
 }
